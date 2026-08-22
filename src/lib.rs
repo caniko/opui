@@ -7,7 +7,10 @@ use serde::de::{self, Deserialize, Deserializer, MapAccess, SeqAccess, Visitor};
 use serde_json::{Map, Number, Value};
 use sha2::{Digest, Sha256};
 
+mod v2;
+
 const SCHEMA_JSON: &str = include_str!("../spec/opui-v1.schema.json");
+const SCHEMA_V2_JSON: &str = include_str!("../spec/opui-v2.schema.json");
 
 pub const SCHEMA: &str = "opui.schema";
 pub const ENCODING: &str = "opui.encoding";
@@ -60,6 +63,49 @@ pub const DIAGNOSTIC_STRATEGY: &str = "opui.diagnostic_strategy";
 pub const DIAGNOSTIC_NODE: &str = "opui.diagnostic_node";
 pub const DIAGNOSTIC_RUNTIME_ID: &str = "opui.diagnostic_runtime_id";
 pub const PACKAGE_NAME: &str = "opui.package_name";
+pub const LENGTH_CONTEXT: &str = "opui.length_context";
+pub const FONT_UNAVAILABLE: &str = "opui.font_unavailable";
+pub const UNKNOWN_BREAKPOINT: &str = "opui.unknown_breakpoint";
+pub const BREAKPOINT_BOUNDS: &str = "opui.breakpoint_bounds";
+pub const BREAKPOINT_OVERLAP: &str = "opui.breakpoint_overlap";
+pub const UNKNOWN_TOKEN: &str = "opui.unknown_token";
+pub const TOKEN_KIND_MISMATCH: &str = "opui.token_kind_mismatch";
+pub const TOKEN_CYCLE: &str = "opui.token_cycle";
+pub const UNKNOWN_THEME: &str = "opui.unknown_theme";
+pub const THEME_CYCLE: &str = "opui.theme_cycle";
+pub const THEME_VALUE_KIND: &str = "opui.theme_value_kind";
+pub const THEME_DEFAULT: &str = "opui.theme_default";
+pub const UNKNOWN_LOCALE: &str = "opui.unknown_locale";
+pub const LOCALE_CYCLE: &str = "opui.locale_cycle";
+pub const UNKNOWN_MESSAGE: &str = "opui.unknown_message";
+pub const LOCALE_DEFAULT: &str = "opui.locale_default";
+pub const UNKNOWN_PATH: &str = "opui.unknown_path";
+pub const PATH_COMMANDS: &str = "opui.path_commands";
+pub const UNKNOWN_MASK_PATH: &str = "opui.unknown_mask_path";
+pub const MASK_SOURCE: &str = "opui.mask_source";
+pub const MASK_ASSET_KIND: &str = "opui.mask_asset_kind";
+pub const UNKNOWN_COMPONENT: &str = "opui.unknown_component";
+pub const COMPONENT_CYCLE: &str = "opui.component_cycle";
+pub const UNKNOWN_TEMPLATE_NODE: &str = "opui.unknown_template_node";
+pub const TEMPLATE_KEY_MISMATCH: &str = "opui.template_key_mismatch";
+pub const COMPONENT_ROOT: &str = "opui.component_root";
+pub const UNKNOWN_SLOT: &str = "opui.unknown_slot";
+pub const SLOT_REQUIRED: &str = "opui.slot_required";
+pub const SLOT_MULTIPLE: &str = "opui.slot_multiple";
+pub const UNKNOWN_VARIANT_AXIS: &str = "opui.unknown_variant_axis";
+pub const UNKNOWN_VARIANT_VALUE: &str = "opui.unknown_variant_value";
+pub const VARIANT_DEFAULT: &str = "opui.variant_default";
+pub const EXPANDED_RUNTIME_ID: &str = "opui.expanded_runtime_id";
+pub const DUPLICATE_EXPANDED_RUNTIME_ID: &str = "opui.duplicate_expanded_runtime_id";
+pub const TEMPLATE_UNREACHABLE: &str = "opui.template_unreachable";
+pub const TEMPLATE_CYCLE: &str = "opui.template_cycle";
+pub const TEMPLATE_UNKNOWN_CHILD: &str = "opui.template_unknown_child";
+pub const TEMPLATE_DUPLICATE_CHILD: &str = "opui.template_duplicate_child";
+pub const TEMPLATE_MULTIPLE_PARENTS: &str = "opui.template_multiple_parents";
+pub const RICH_TEXT_EMPTY: &str = "opui.rich_text_empty";
+pub const TEXT_PATH_INCOMPATIBLE: &str = "opui.text_path_incompatible";
+pub const TEXT_PATH_UNKNOWN: &str = "opui.text_path_unknown";
+pub const UNRESOLVED_INLINE_IMAGE: &str = "opui.unresolved_inline_image";
 
 const IJSON_MAX: i64 = 9_007_199_254_740_991;
 
@@ -100,7 +146,7 @@ impl Diagnostic {
         }
     }
 
-    fn with_node(mut self, id: impl Into<String>) -> Self {
+    pub(crate) fn with_node(mut self, id: impl Into<String>) -> Self {
         self.node_id = Some(id.into());
         self
     }
@@ -531,8 +577,23 @@ fn encoding_precheck(bytes: &[u8], diags: &mut Vec<Diagnostic>) {
     }
 }
 
+fn schema_version(value: &Value) -> Option<u64> {
+    value.get("schema_version").and_then(Value::as_u64)
+}
+
 fn schema_check(value: &Value, diags: &mut Vec<Diagnostic>) {
-    let validator = compiled_schema();
+    let validator = match schema_version(value) {
+        Some(1) => compiled_schema_v1(),
+        Some(2) => compiled_schema_v2(),
+        _ => {
+            diags.push(Diagnostic::error(
+                SCHEMA,
+                "/schema_version",
+                "unsupported or missing schema_version",
+            ));
+            return;
+        }
+    };
     for error in validator.iter_errors(value) {
         diags.push(Diagnostic::error(
             SCHEMA,
@@ -542,11 +603,19 @@ fn schema_check(value: &Value, diags: &mut Vec<Diagnostic>) {
     }
 }
 
-fn compiled_schema() -> &'static jsonschema::Validator {
+fn compiled_schema_v1() -> &'static jsonschema::Validator {
     static VALIDATOR: OnceLock<jsonschema::Validator> = OnceLock::new();
     VALIDATOR.get_or_init(|| {
         let schema: Value = serde_json::from_str(SCHEMA_JSON).expect("opui schema json");
         jsonschema::draft202012::new(&schema).expect("opui schema")
+    })
+}
+
+fn compiled_schema_v2() -> &'static jsonschema::Validator {
+    static VALIDATOR: OnceLock<jsonschema::Validator> = OnceLock::new();
+    VALIDATOR.get_or_init(|| {
+        let schema: Value = serde_json::from_str(SCHEMA_V2_JSON).expect("opui v2 schema json");
+        jsonschema::draft202012::new(&schema).expect("opui v2 schema")
     })
 }
 
@@ -564,6 +633,18 @@ fn semantic_check(value: &Value, opts: &CheckOptions, diags: &mut Vec<Diagnostic
     let Some(root) = value.as_object() else {
         return;
     };
+    match schema_version(value) {
+        Some(1) => semantic_check_v1(root, opts, diags),
+        Some(2) => {
+            let nodes = root.get("nodes").and_then(Value::as_object);
+            let assets = root.get("assets").and_then(Value::as_object);
+            v2::check(root, nodes, assets, opts, diags);
+        }
+        _ => {}
+    }
+}
+
+fn semantic_check_v1(root: &Map<String, Value>, opts: &CheckOptions, diags: &mut Vec<Diagnostic>) {
     let nodes = root.get("nodes").and_then(Value::as_object);
     let assets = root.get("assets").and_then(Value::as_object);
     if let Some(nodes) = nodes {
@@ -575,13 +656,13 @@ fn semantic_check(value: &Value, opts: &CheckOptions, diags: &mut Vec<Diagnostic
     if let (Some(nodes), Some(entrypoints)) =
         (nodes, root.get("entrypoints").and_then(Value::as_object))
     {
-        check_forest(nodes, entrypoints, diags);
+        check_forest(nodes, entrypoints, &[], diags);
     }
     check_package_name(root, opts, diags);
     check_file_diagnostics(root, nodes, diags);
 }
 
-fn walk_ijson_numbers(value: &Value, pointer: &str, diags: &mut Vec<Diagnostic>) {
+pub(crate) fn walk_ijson_numbers(value: &Value, pointer: &str, diags: &mut Vec<Diagnostic>) {
     match value {
         Value::Number(n) => {
             if n.as_f64().is_some_and(|f| !f.is_finite()) {
@@ -618,11 +699,11 @@ fn walk_ijson_numbers(value: &Value, pointer: &str, diags: &mut Vec<Diagnostic>)
     }
 }
 
-fn escape_pointer(s: &str) -> String {
+pub(crate) fn escape_pointer(s: &str) -> String {
     s.replace('~', "~0").replace('/', "~1")
 }
 
-fn check_nodes(
+pub(crate) fn check_nodes(
     nodes: &Map<String, Value>,
     assets: Option<&Map<String, Value>>,
     diags: &mut Vec<Diagnostic>,
@@ -686,6 +767,15 @@ fn check_gradient_stops(
     let Some(fill) = obj.get("style").and_then(|s| s.get("fill")) else {
         return;
     };
+    check_fill_stops(node_id, &format!("{path}/style/fill"), fill, diags);
+}
+
+pub(crate) fn check_fill_stops(
+    node_id: &str,
+    path: &str,
+    fill: &Value,
+    diags: &mut Vec<Diagnostic>,
+) {
     let ty = fill.get("type").and_then(Value::as_str);
     if !matches!(ty, Some("linear") | Some("radial")) {
         return;
@@ -702,7 +792,7 @@ fn check_gradient_stops(
             diags.push(
                 Diagnostic::error(
                     GRADIENT_STOP_ORDER,
-                    format!("{path}/style/fill/stops"),
+                    format!("{path}/stops"),
                     "gradient stops must be nondecreasing by offset",
                 )
                 .with_node(node_id),
@@ -825,7 +915,7 @@ fn check_font_ref(
     }
 }
 
-fn check_image(
+pub(crate) fn check_image(
     node_id: &str,
     path: &str,
     image: &Value,
@@ -880,7 +970,7 @@ fn check_image(
     }
 }
 
-fn check_fallback_asset(
+pub(crate) fn check_fallback_asset(
     node_id: &str,
     path: &str,
     fallback: &Value,
@@ -911,16 +1001,24 @@ fn check_fallback_asset(
     }
 }
 
-fn asset_kind<'a>(assets: Option<&'a Map<String, Value>>, id: &str) -> Option<&'a str> {
+pub(crate) fn asset_kind<'a>(assets: Option<&'a Map<String, Value>>, id: &str) -> Option<&'a str> {
     assets?.get(id)?.get("kind")?.as_str()
 }
 
-fn check_forest(
+pub(crate) struct ForestEdge<'a> {
+    pub parent: &'a str,
+    pub child: &'a str,
+    pub path: String,
+}
+
+pub(crate) fn check_forest(
     nodes: &Map<String, Value>,
     entrypoints: &Map<String, Value>,
+    extra_edges: &[ForestEdge<'_>],
     diags: &mut Vec<Diagnostic>,
 ) {
     let mut parent: HashMap<&str, &str> = HashMap::new();
+    let mut extras: HashMap<&str, Vec<&str>> = HashMap::new();
     for (id, node) in nodes {
         let Some(children) = node.get("children").and_then(Value::as_array) else {
             continue;
@@ -931,34 +1029,25 @@ fn check_forest(
                 continue;
             };
             let cpath = format!("/nodes/{}/children/{i}", escape_pointer(id));
-            if !seen.insert(cid) {
-                diags.push(
-                    Diagnostic::error(DUPLICATE_CHILD, cpath, format!("duplicate child `{cid}`"))
-                        .with_node(id),
-                );
-                continue;
-            }
-            if !nodes.contains_key(cid) {
-                diags.push(
-                    Diagnostic::error(UNKNOWN_CHILD, cpath, format!("unknown child `{cid}`"))
-                        .with_node(id),
-                );
-                continue;
-            }
-            if let Some(existing) = parent.insert(cid, id.as_str()) {
-                diags.push(
-                    Diagnostic::error(
-                        MULTIPLE_PARENTS,
-                        format!("/nodes/{}", escape_pointer(cid)),
-                        format!("`{cid}` already has parent `{existing}`"),
-                    )
-                    .with_node(cid),
-                );
-            }
+            record_forest_edge(id, cid, &cpath, nodes, &mut seen, &mut parent, diags);
         }
     }
+    let mut extra_seen: HashMap<&str, HashSet<&str>> = HashMap::new();
+    for edge in extra_edges {
+        let seen = extra_seen.entry(edge.parent).or_default();
+        extras.entry(edge.parent).or_default().push(edge.child);
+        record_forest_edge(
+            edge.parent,
+            edge.child,
+            &edge.path,
+            nodes,
+            seen,
+            &mut parent,
+            diags,
+        );
+    }
 
-    if let Some(cycle_id) = find_cycle(nodes, &parent) {
+    if let Some(cycle_id) = find_cycle(nodes, &extras) {
         diags.push(
             Diagnostic::error(
                 CYCLE,
@@ -993,7 +1082,7 @@ fn check_forest(
                 .with_node(tid),
             );
         }
-        walk_reachable(tid, nodes, &mut reachable);
+        walk_reachable(tid, nodes, &extras, &mut reachable);
     }
     for id in nodes.keys() {
         if !reachable.contains(id.as_str()) {
@@ -1009,11 +1098,50 @@ fn check_forest(
     }
 }
 
-fn find_cycle<'a>(nodes: &'a Map<String, Value>, _parent: &HashMap<&str, &str>) -> Option<&'a str> {
+fn record_forest_edge<'a>(
+    parent_id: &'a str,
+    cid: &'a str,
+    cpath: &str,
+    nodes: &Map<String, Value>,
+    seen: &mut HashSet<&'a str>,
+    parent: &mut HashMap<&'a str, &'a str>,
+    diags: &mut Vec<Diagnostic>,
+) {
+    if !seen.insert(cid) {
+        diags.push(
+            Diagnostic::error(DUPLICATE_CHILD, cpath, format!("duplicate child `{cid}`"))
+                .with_node(parent_id),
+        );
+        return;
+    }
+    if !nodes.contains_key(cid) {
+        diags.push(
+            Diagnostic::error(UNKNOWN_CHILD, cpath, format!("unknown child `{cid}`"))
+                .with_node(parent_id),
+        );
+        return;
+    }
+    if let Some(existing) = parent.insert(cid, parent_id) {
+        diags.push(
+            Diagnostic::error(
+                MULTIPLE_PARENTS,
+                format!("/nodes/{}", escape_pointer(cid)),
+                format!("`{cid}` already has parent `{existing}`"),
+            )
+            .with_node(cid),
+        );
+    }
+}
+
+fn find_cycle<'a>(
+    nodes: &'a Map<String, Value>,
+    extras: &HashMap<&str, Vec<&'a str>>,
+) -> Option<&'a str> {
     let mut state: HashMap<&str, u8> = HashMap::new();
     fn dfs<'a>(
         id: &'a str,
         nodes: &'a Map<String, Value>,
+        extras: &HashMap<&str, Vec<&'a str>>,
         state: &mut HashMap<&'a str, u8>,
     ) -> Option<&'a str> {
         state.insert(id, 1);
@@ -1030,7 +1158,20 @@ fn find_cycle<'a>(nodes: &'a Map<String, Value>, _parent: &HashMap<&str, &str>) 
                     Some(1) => return Some(cid),
                     Some(2) => {}
                     _ => {
-                        if let Some(hit) = dfs(cid, nodes, state) {
+                        if let Some(hit) = dfs(cid, nodes, extras, state) {
+                            return Some(hit);
+                        }
+                    }
+                }
+            }
+        }
+        if let Some(more) = extras.get(id) {
+            for cid in more {
+                match state.get(cid).copied() {
+                    Some(1) => return Some(cid),
+                    Some(2) => {}
+                    _ => {
+                        if let Some(hit) = dfs(cid, nodes, extras, state) {
                             return Some(hit);
                         }
                     }
@@ -1042,7 +1183,7 @@ fn find_cycle<'a>(nodes: &'a Map<String, Value>, _parent: &HashMap<&str, &str>) 
     }
     for id in nodes.keys() {
         if !state.contains_key(id.as_str())
-            && let Some(hit) = dfs(id, nodes, &mut state)
+            && let Some(hit) = dfs(id, nodes, extras, &mut state)
         {
             return Some(hit);
         }
@@ -1050,25 +1191,38 @@ fn find_cycle<'a>(nodes: &'a Map<String, Value>, _parent: &HashMap<&str, &str>) 
     None
 }
 
-fn walk_reachable<'a>(id: &'a str, nodes: &'a Map<String, Value>, seen: &mut HashSet<&'a str>) {
+fn walk_reachable<'a>(
+    id: &'a str,
+    nodes: &'a Map<String, Value>,
+    extras: &HashMap<&str, Vec<&'a str>>,
+    seen: &mut HashSet<&'a str>,
+) {
     if !seen.insert(id) {
         return;
     }
-    let Some(children) = nodes
+    if let Some(children) = nodes
         .get(id)
         .and_then(|n| n.get("children"))
         .and_then(Value::as_array)
-    else {
-        return;
-    };
-    for child in children {
-        if let Some(cid) = child.as_str() {
-            walk_reachable(cid, nodes, seen);
+    {
+        for child in children {
+            if let Some(cid) = child.as_str() {
+                walk_reachable(cid, nodes, extras, seen);
+            }
+        }
+    }
+    if let Some(more) = extras.get(id) {
+        for cid in more {
+            walk_reachable(cid, nodes, extras, seen);
         }
     }
 }
 
-fn check_assets(assets: &Map<String, Value>, opts: &CheckOptions, diags: &mut Vec<Diagnostic>) {
+pub(crate) fn check_assets(
+    assets: &Map<String, Value>,
+    opts: &CheckOptions,
+    diags: &mut Vec<Diagnostic>,
+) {
     for (key, asset) in assets {
         let path = format!("/assets/{}", escape_pointer(key));
         let Some(obj) = asset.as_object() else {
@@ -1458,7 +1612,11 @@ fn is_fragment_ref(value: &str) -> bool {
     v.starts_with('#') && !v[1..].contains([':', '/'])
 }
 
-fn check_package_name(root: &Map<String, Value>, opts: &CheckOptions, diags: &mut Vec<Diagnostic>) {
+pub(crate) fn check_package_name(
+    root: &Map<String, Value>,
+    opts: &CheckOptions,
+    diags: &mut Vec<Diagnostic>,
+) {
     let Some(expected) = opts.package_name.as_deref() else {
         return;
     };
@@ -1475,7 +1633,7 @@ fn check_package_name(root: &Map<String, Value>, opts: &CheckOptions, diags: &mu
     }
 }
 
-fn check_file_diagnostics(
+pub(crate) fn check_file_diagnostics(
     root: &Map<String, Value>,
     nodes: Option<&Map<String, Value>>,
     diags: &mut Vec<Diagnostic>,
@@ -1734,6 +1892,15 @@ fn sort_diagnostics(diags: &mut [Diagnostic]) {
 
 pub fn default_schema_path() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("spec/opui-v1.schema.json")
+}
+
+pub fn schema_path(version: u64) -> Option<PathBuf> {
+    let name = match version {
+        1 => "spec/opui-v1.schema.json",
+        2 => "spec/opui-v2.schema.json",
+        _ => return None,
+    };
+    Some(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(name))
 }
 
 #[cfg(test)]

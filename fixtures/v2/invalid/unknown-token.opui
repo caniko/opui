@@ -1,0 +1,38 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "unknown-token",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "2.0.0"
+  },
+  "nodes": {
+    "root": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {},
+      "source_id": "root",
+      "style": {
+        "opacity": {
+          "token": "missing"
+        }
+      },
+      "type": "container",
+      "visible": true
+    }
+  },
+  "resources": {},
+  "schema_version": 2
+}

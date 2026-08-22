@@ -3,7 +3,8 @@ use std::path::PathBuf;
 
 use opui::{
     ASSET_URI_RULE, CYCLE, CheckOptions, DUPLICATE_JSON_KEY, DUPLICATE_RUNTIME_ID, KEY_ORDER,
-    SCHEMA, TEXT_RUN_SCALAR, UNKNOWN_CHILD, canonical_bytes, check_bytes, check_path, parse_strict,
+    SCHEMA, TEXT_RUN_SCALAR, UNKNOWN_CHILD, UNKNOWN_TOKEN, canonical_bytes, check_bytes,
+    check_path, parse_strict,
 };
 
 fn root() -> PathBuf {
@@ -63,6 +64,31 @@ fn example_is_schema_valid() {
 }
 
 #[test]
+fn v2_example_is_schema_and_semantically_valid() {
+    let bytes = fs::read(root().join("spec/opui-v2.example.json")).unwrap();
+    let diags = check_bytes(
+        &bytes,
+        &CheckOptions {
+            check_assets: true,
+            check_canonical: true,
+            asset_root: None,
+            package_name: None,
+        },
+    );
+    assert!(diags.is_empty(), "{diags:#?}");
+}
+
+#[test]
+fn v2_fixture_is_clean_and_canonical() {
+    let path = fixtures().join("v2/minimal-v2.opui");
+    let diags = check_path(&path, &CheckOptions::for_path(&path));
+    assert!(diags.is_empty(), "{diags:#?}");
+    let bytes = fs::read(&path).unwrap();
+    let (value, _) = parse_strict(&bytes).unwrap();
+    assert_eq!(canonical_bytes(&value), bytes);
+}
+
+#[test]
 fn invalid_fixtures_emit_primary_code() {
     let cases = [
         ("unsupported-schema-version.opui", SCHEMA),
@@ -82,6 +108,17 @@ fn invalid_fixtures_emit_primary_code() {
             path.display()
         );
     }
+}
+
+#[test]
+fn invalid_v2_fixture_emits_primary_code() {
+    let path = fixtures().join("v2/invalid/unknown-token.opui");
+    let diags = check_path(&path, &CheckOptions::for_path(&path));
+    assert!(
+        diags.iter().any(|d| d.code == UNKNOWN_TOKEN),
+        "{} missing {UNKNOWN_TOKEN}: {diags:#?}",
+        path.display()
+    );
 }
 
 #[test]

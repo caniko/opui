@@ -1,0 +1,3904 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "opui-v2.schema.json",
+  "title": "openpencil-runtime-ui",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "schema_version",
+    "generator",
+    "document",
+    "entrypoints",
+    "assets",
+    "resources",
+    "nodes",
+    "diagnostics",
+    "extensions"
+  ],
+  "properties": {
+    "format": {
+      "const": "openpencil-runtime-ui"
+    },
+    "schema_version": {
+      "const": 2,
+      "type": "integer"
+    },
+    "generator": {
+      "$ref": "#/$defs/generator"
+    },
+    "document": {
+      "$ref": "#/$defs/document"
+    },
+    "entrypoints": {
+      "$ref": "#/$defs/entrypoints"
+    },
+    "assets": {
+      "$ref": "#/$defs/assetMap"
+    },
+    "resources": {
+      "$ref": "#/$defs/resources"
+    },
+    "nodes": {
+      "$ref": "#/$defs/nodeMap"
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/diagnostic"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensionMap"
+    }
+  },
+  "$defs": {
+    "iJsonInteger": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "iJsonNonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "iJsonPositiveInteger": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "finiteNumber": {
+      "type": "number"
+    },
+    "nonNegativeNumber": {
+      "type": "number",
+      "minimum": 0
+    },
+    "positiveNumber": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "unitInterval": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "miterLimit": {
+      "type": "number",
+      "minimum": 1
+    },
+    "sourceId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "templateId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtimeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._/-]*$"
+    },
+    "runtimePartId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9._-]*$"
+    },
+    "nullableRuntimeId": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/runtimeId"
+        }
+      ]
+    },
+    "nullableSourceId": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/sourceId"
+        }
+      ]
+    },
+    "stableId": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9]*([._-][A-Za-z0-9]+)*$"
+    },
+    "localeId": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "assetId": {
+      "type": "string",
+      "pattern": "^(image|font|vector|raster_fallback)-[a-f0-9]{64}$"
+    },
+    "imageOrVectorAssetId": {
+      "type": "string",
+      "pattern": "^(image|vector)-[a-f0-9]{64}$"
+    },
+    "fontAssetId": {
+      "type": "string",
+      "pattern": "^font-[a-f0-9]{64}$"
+    },
+    "rasterFallbackAssetId": {
+      "type": "string",
+      "pattern": "^raster_fallback-[a-f0-9]{64}$"
+    },
+    "assetUri": {
+      "type": "string",
+      "pattern": "^(images|fonts|vectors|fallback)/[a-f0-9]{64}\\.(png|jpg|webp|ttf|otf|woff2|svg)$"
+    },
+    "reverseDomain": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*(\\.[a-z0-9-]+)+$"
+    },
+    "extensionMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/reverseDomain"
+      },
+      "additionalProperties": true
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "tokenRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "token": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "required": [
+        "token"
+      ]
+    },
+    "colorLiteral": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "space": {
+          "enum": [
+            "srgb",
+            "srgb-linear"
+          ]
+        },
+        "r": {
+          "$ref": "#/$defs/unitInterval"
+        },
+        "g": {
+          "$ref": "#/$defs/unitInterval"
+        },
+        "b": {
+          "$ref": "#/$defs/unitInterval"
+        },
+        "a": {
+          "$ref": "#/$defs/unitInterval"
+        }
+      },
+      "required": [
+        "space",
+        "r",
+        "g",
+        "b",
+        "a"
+      ]
+    },
+    "colorValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/colorLiteral"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "numberValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/finiteNumber"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "nonNegativeNumberValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/nonNegativeNumber"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "positiveNumberValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/positiveNumber"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "unitIntervalValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/unitInterval"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "miterLimitValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/miterLimit"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "iJsonIntegerValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/iJsonInteger"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "fontWeightValue": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "stringValue": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "fontValue": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fontAssetId"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ]
+    },
+    "referenceViewport": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "width": {
+          "$ref": "#/$defs/positiveNumber"
+        },
+        "height": {
+          "$ref": "#/$defs/positiveNumber"
+        }
+      },
+      "required": [
+        "width",
+        "height"
+      ]
+    },
+    "document": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_viewport": {
+          "$ref": "#/$defs/referenceViewport"
+        }
+      },
+      "required": [
+        "name",
+        "reference_viewport"
+      ]
+    },
+    "entrypoints": {
+      "type": "object",
+      "required": [
+        "default"
+      ],
+      "properties": {
+        "default": {
+          "$ref": "#/$defs/sourceId"
+        }
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/sourceId"
+      }
+    },
+    "lengthPx": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "px"
+        },
+        "value": {
+          "$ref": "#/$defs/finiteNumber"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "lengthPxNonNegative": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "px"
+        },
+        "value": {
+          "$ref": "#/$defs/nonNegativeNumber"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "lengthPxPercent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "px",
+            "percent"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/finiteNumber"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "lengthPxPercentNonNegative": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "px",
+            "percent"
+          ]
+        },
+        "value": {
+          "$ref": "#/$defs/nonNegativeNumber"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "lengthAuto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "auto"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "lengthNone": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "none"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "lengthFill": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "fill"
+        },
+        "weight": {
+          "$ref": "#/$defs/positiveNumberValue"
+        }
+      },
+      "required": [
+        "type",
+        "weight"
+      ]
+    },
+    "lengthFr": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "fr"
+        },
+        "value": {
+          "$ref": "#/$defs/nonNegativeNumberValue"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "lengthPxOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPx"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxNonNegativeOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxNonNegative"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxPercentOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxPercentNonNegativeOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercentNonNegative"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxPercentAutoOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/lengthAuto"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxPercentAutoFillOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/lengthAuto"
+        },
+        {
+          "$ref": "#/$defs/lengthFill"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthPxPercentNoneOrToken": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/lengthNone"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "lengthCatalog": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthAuto"
+        },
+        {
+          "$ref": "#/$defs/lengthNone"
+        },
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/lengthFill"
+        },
+        {
+          "$ref": "#/$defs/lengthFr"
+        },
+        {
+          "$ref": "#/$defs/minmax"
+        }
+      ]
+    },
+    "edgesPxPercent": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "right": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "bottom": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "left": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        }
+      },
+      "required": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "edgesPxPercentAuto": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        },
+        "right": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        },
+        "bottom": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        },
+        "left": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        }
+      },
+      "required": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "row": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "column": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        }
+      },
+      "required": [
+        "row",
+        "column"
+      ]
+    },
+    "trackSize": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/lengthPxPercent"
+        },
+        {
+          "$ref": "#/$defs/lengthFr"
+        },
+        {
+          "$ref": "#/$defs/lengthAuto"
+        },
+        {
+          "$ref": "#/$defs/minmax"
+        },
+        {
+          "$ref": "#/$defs/tokenRef"
+        }
+      ]
+    },
+    "trackList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/trackSize"
+      }
+    },
+    "minmax": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "minmax"
+        },
+        "min": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/lengthPxPercent"
+            },
+            {
+              "$ref": "#/$defs/lengthFr"
+            },
+            {
+              "$ref": "#/$defs/lengthAuto"
+            },
+            {
+              "$ref": "#/$defs/tokenRef"
+            }
+          ]
+        },
+        "max": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/lengthPxPercent"
+            },
+            {
+              "$ref": "#/$defs/lengthFr"
+            },
+            {
+              "$ref": "#/$defs/lengthAuto"
+            },
+            {
+              "$ref": "#/$defs/lengthNone"
+            },
+            {
+              "$ref": "#/$defs/tokenRef"
+            }
+          ]
+        }
+      },
+      "required": [
+        "type",
+        "min",
+        "max"
+      ]
+    },
+    "gridLine": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "auto"
+            }
+          },
+          "required": [
+            "kind"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "line"
+            },
+            "value": {
+              "$ref": "#/$defs/iJsonInteger",
+              "not": {
+                "const": 0
+              }
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "const": "span"
+            },
+            "value": {
+              "$ref": "#/$defs/iJsonPositiveInteger"
+            }
+          },
+          "required": [
+            "kind",
+            "value"
+          ]
+        }
+      ]
+    },
+    "gridPlacement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/gridLine"
+        },
+        "end": {
+          "$ref": "#/$defs/gridLine"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "aspectRatio": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "auto"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "ratio"
+            },
+            "value": {
+              "$ref": "#/$defs/positiveNumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ]
+    },
+    "justifyContent": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "stretch",
+        "space_between",
+        "space_around",
+        "space_evenly"
+      ]
+    },
+    "alignItems": {
+      "enum": [
+        "start",
+        "end",
+        "center",
+        "stretch",
+        "baseline"
+      ]
+    },
+    "alignSelf": {
+      "enum": [
+        "auto",
+        "start",
+        "end",
+        "center",
+        "stretch",
+        "baseline"
+      ]
+    },
+    "overflowAxis": {
+      "enum": [
+        "visible",
+        "hidden",
+        "scroll",
+        "auto"
+      ]
+    },
+    "scrollbar": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visibility": {
+          "enum": [
+            "auto",
+            "always",
+            "hidden"
+          ]
+        },
+        "overscroll": {
+          "enum": [
+            "propagate",
+            "contain"
+          ]
+        }
+      },
+      "required": [
+        "visibility",
+        "overscroll"
+      ]
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "display": {
+          "enum": [
+            "flex",
+            "grid",
+            "absolute",
+            "none"
+          ]
+        },
+        "position": {
+          "enum": [
+            "flow",
+            "absolute"
+          ]
+        },
+        "overflow_x": {
+          "$ref": "#/$defs/overflowAxis"
+        },
+        "overflow_y": {
+          "$ref": "#/$defs/overflowAxis"
+        },
+        "scrollbar": {
+          "$ref": "#/$defs/scrollbar"
+        },
+        "width": {
+          "$ref": "#/$defs/lengthPxPercentAutoFillOrToken"
+        },
+        "height": {
+          "$ref": "#/$defs/lengthPxPercentAutoFillOrToken"
+        },
+        "min_width": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        },
+        "min_height": {
+          "$ref": "#/$defs/lengthPxPercentAutoOrToken"
+        },
+        "max_width": {
+          "$ref": "#/$defs/lengthPxPercentNoneOrToken"
+        },
+        "max_height": {
+          "$ref": "#/$defs/lengthPxPercentNoneOrToken"
+        },
+        "padding": {
+          "$ref": "#/$defs/edgesPxPercent"
+        },
+        "margin": {
+          "$ref": "#/$defs/edgesPxPercentAuto"
+        },
+        "inset": {
+          "$ref": "#/$defs/edgesPxPercentAuto"
+        },
+        "flex_direction": {
+          "enum": [
+            "row",
+            "row_reverse",
+            "column",
+            "column_reverse"
+          ]
+        },
+        "flex_wrap": {
+          "enum": [
+            "nowrap",
+            "wrap",
+            "wrap_reverse"
+          ]
+        },
+        "flex_grow": {
+          "$ref": "#/$defs/nonNegativeNumberValue"
+        },
+        "flex_shrink": {
+          "$ref": "#/$defs/nonNegativeNumberValue"
+        },
+        "flex_basis": {
+          "$ref": "#/$defs/lengthPxPercentAutoFillOrToken"
+        },
+        "justify_content": {
+          "$ref": "#/$defs/justifyContent"
+        },
+        "justify_items": {
+          "$ref": "#/$defs/alignItems"
+        },
+        "justify_self": {
+          "$ref": "#/$defs/alignSelf"
+        },
+        "align_content": {
+          "$ref": "#/$defs/justifyContent"
+        },
+        "align_items": {
+          "$ref": "#/$defs/alignItems"
+        },
+        "align_self": {
+          "$ref": "#/$defs/alignSelf"
+        },
+        "gap": {
+          "$ref": "#/$defs/gap"
+        },
+        "grid_template_columns": {
+          "$ref": "#/$defs/trackList"
+        },
+        "grid_template_rows": {
+          "$ref": "#/$defs/trackList"
+        },
+        "grid_auto_flow": {
+          "enum": [
+            "row",
+            "column",
+            "row_dense",
+            "column_dense"
+          ]
+        },
+        "grid_column": {
+          "$ref": "#/$defs/gridPlacement"
+        },
+        "grid_row": {
+          "$ref": "#/$defs/gridPlacement"
+        },
+        "aspect_ratio": {
+          "$ref": "#/$defs/aspectRatio"
+        },
+        "z_index": {
+          "$ref": "#/$defs/iJsonIntegerValue"
+        }
+      },
+      "required": []
+    },
+    "normalizedPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/finiteNumber"
+        },
+        "y": {
+          "$ref": "#/$defs/finiteNumber"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "positivePoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/positiveNumber"
+        },
+        "y": {
+          "$ref": "#/$defs/positiveNumber"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "colorStop": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "offset": {
+          "$ref": "#/$defs/unitInterval"
+        },
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        }
+      },
+      "required": [
+        "offset",
+        "color"
+      ]
+    },
+    "colorStops": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/colorStop"
+      }
+    },
+    "fillItem": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "solid"
+            },
+            "color": {
+              "$ref": "#/$defs/colorValue"
+            }
+          },
+          "required": [
+            "type",
+            "color"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "linear"
+            },
+            "start": {
+              "$ref": "#/$defs/normalizedPoint"
+            },
+            "end": {
+              "$ref": "#/$defs/normalizedPoint"
+            },
+            "stops": {
+              "$ref": "#/$defs/colorStops"
+            }
+          },
+          "required": [
+            "type",
+            "start",
+            "end",
+            "stops"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "radial"
+            },
+            "center": {
+              "$ref": "#/$defs/normalizedPoint"
+            },
+            "radius": {
+              "$ref": "#/$defs/positivePoint"
+            },
+            "stops": {
+              "$ref": "#/$defs/colorStops"
+            }
+          },
+          "required": [
+            "type",
+            "center",
+            "radius",
+            "stops"
+          ]
+        }
+      ]
+    },
+    "fills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fillItem"
+      }
+    },
+    "border": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "width": {
+          "$ref": "#/$defs/lengthPxNonNegativeOrToken"
+        },
+        "style": {
+          "enum": [
+            "none",
+            "solid"
+          ]
+        },
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        }
+      },
+      "required": [
+        "width",
+        "style",
+        "color"
+      ]
+    },
+    "borders": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "$ref": "#/$defs/border"
+        },
+        "right": {
+          "$ref": "#/$defs/border"
+        },
+        "bottom": {
+          "$ref": "#/$defs/border"
+        },
+        "left": {
+          "$ref": "#/$defs/border"
+        }
+      },
+      "required": []
+    },
+    "cornerRadius": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top_left": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "top_right": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "bottom_right": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        },
+        "bottom_left": {
+          "$ref": "#/$defs/lengthPxPercentNonNegativeOrToken"
+        }
+      },
+      "required": [
+        "top_left",
+        "top_right",
+        "bottom_right",
+        "bottom_left"
+      ]
+    },
+    "shadow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "outer",
+            "inner"
+          ]
+        },
+        "offset_x": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "offset_y": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "blur": {
+          "$ref": "#/$defs/lengthPxNonNegativeOrToken"
+        },
+        "spread": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        }
+      },
+      "required": [
+        "kind",
+        "offset_x",
+        "offset_y",
+        "blur",
+        "spread",
+        "color"
+      ]
+    },
+    "translation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "y": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "rotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "degrees": {
+          "$ref": "#/$defs/numberValue"
+        }
+      },
+      "required": [
+        "degrees"
+      ]
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/numberValue"
+        },
+        "y": {
+          "$ref": "#/$defs/numberValue"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "skew": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/numberValue"
+        },
+        "y": {
+          "$ref": "#/$defs/numberValue"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "transformOrigin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "$ref": "#/$defs/unitIntervalValue"
+        },
+        "y": {
+          "$ref": "#/$defs/unitIntervalValue"
+        }
+      },
+      "required": [
+        "x",
+        "y"
+      ]
+    },
+    "filter": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "blur"
+            },
+            "value": {
+              "$ref": "#/$defs/nonNegativeNumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "brightness"
+            },
+            "value": {
+              "$ref": "#/$defs/nonNegativeNumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "contrast"
+            },
+            "value": {
+              "$ref": "#/$defs/nonNegativeNumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "saturate"
+            },
+            "value": {
+              "$ref": "#/$defs/nonNegativeNumberValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "hue_rotate"
+            },
+            "degrees": {
+              "$ref": "#/$defs/numberValue"
+            }
+          },
+          "required": [
+            "type",
+            "degrees"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "opacity"
+            },
+            "value": {
+              "$ref": "#/$defs/unitIntervalValue"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ]
+    },
+    "blendMode": {
+      "enum": [
+        "normal",
+        "multiply",
+        "screen",
+        "overlay",
+        "darken",
+        "lighten",
+        "color_dodge",
+        "color_burn",
+        "hard_light",
+        "soft_light",
+        "difference",
+        "exclusion",
+        "hue",
+        "saturation",
+        "color",
+        "luminosity"
+      ]
+    },
+    "style": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "opacity": {
+          "$ref": "#/$defs/unitIntervalValue"
+        },
+        "clipping": {
+          "type": "boolean"
+        },
+        "fills": {
+          "$ref": "#/$defs/fills"
+        },
+        "borders": {
+          "$ref": "#/$defs/borders"
+        },
+        "corner_radius": {
+          "$ref": "#/$defs/cornerRadius"
+        },
+        "shadows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/shadow"
+          }
+        },
+        "translation": {
+          "$ref": "#/$defs/translation"
+        },
+        "rotation": {
+          "$ref": "#/$defs/rotation"
+        },
+        "scale": {
+          "$ref": "#/$defs/scale"
+        },
+        "skew": {
+          "$ref": "#/$defs/skew"
+        },
+        "transform_origin": {
+          "$ref": "#/$defs/transformOrigin"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/filter"
+          }
+        },
+        "blend_mode": {
+          "$ref": "#/$defs/blendMode"
+        }
+      },
+      "required": []
+    },
+    "lineHeight": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "normal"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "multiple"
+            },
+            "value": {
+              "$ref": "#/$defs/positiveNumber"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "px"
+            },
+            "value": {
+              "$ref": "#/$defs/nonNegativeNumber"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        }
+      ]
+    },
+    "textStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/stringValue"
+        },
+        "font": {
+          "$ref": "#/$defs/fontValue"
+        },
+        "weight": {
+          "$ref": "#/$defs/fontWeightValue"
+        },
+        "font_style": {
+          "enum": [
+            "normal",
+            "italic"
+          ]
+        },
+        "size": {
+          "$ref": "#/$defs/lengthPxNonNegativeOrToken"
+        },
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        },
+        "letter_spacing": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "line_height": {
+          "$ref": "#/$defs/lineHeight"
+        }
+      },
+      "required": [
+        "family",
+        "weight",
+        "font_style",
+        "size",
+        "color",
+        "letter_spacing",
+        "line_height"
+      ]
+    },
+    "textStyleOverrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "family": {
+          "$ref": "#/$defs/stringValue"
+        },
+        "font": {
+          "$ref": "#/$defs/fontValue"
+        },
+        "weight": {
+          "$ref": "#/$defs/fontWeightValue"
+        },
+        "font_style": {
+          "enum": [
+            "normal",
+            "italic"
+          ]
+        },
+        "size": {
+          "$ref": "#/$defs/lengthPxNonNegativeOrToken"
+        },
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        },
+        "letter_spacing": {
+          "$ref": "#/$defs/lengthPxOrToken"
+        },
+        "line_height": {
+          "$ref": "#/$defs/lineHeight"
+        }
+      },
+      "required": [],
+      "minProperties": 1
+    },
+    "spanText": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "text"
+        },
+        "value": {
+          "type": "string"
+        },
+        "style": {
+          "$ref": "#/$defs/textStyleOverrides"
+        }
+      },
+      "required": [
+        "type",
+        "value"
+      ]
+    },
+    "spanLineBreak": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "line_break"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "spanInlineImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "inline_image"
+        },
+        "asset": {
+          "$ref": "#/$defs/imageOrVectorAssetId"
+        },
+        "intrinsic_width": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "intrinsic_height": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        }
+      },
+      "required": [
+        "type",
+        "asset",
+        "intrinsic_width",
+        "intrinsic_height"
+      ]
+    },
+    "span": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/spanText"
+        },
+        {
+          "$ref": "#/$defs/spanLineBreak"
+        },
+        {
+          "$ref": "#/$defs/spanInlineImage"
+        }
+      ]
+    },
+    "spanList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/span"
+      }
+    },
+    "listItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "spans": {
+          "$ref": "#/$defs/spanList"
+        }
+      },
+      "required": [
+        "spans"
+      ]
+    },
+    "blockParagraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "paragraph"
+        },
+        "spans": {
+          "$ref": "#/$defs/spanList"
+        }
+      },
+      "required": [
+        "type",
+        "spans"
+      ]
+    },
+    "blockUnorderedList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "unordered_list"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/listItem"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "items"
+      ]
+    },
+    "blockOrderedList": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ordered_list"
+        },
+        "start": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/listItem"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "start",
+        "items"
+      ]
+    },
+    "block": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/blockParagraph"
+        },
+        {
+          "$ref": "#/$defs/blockUnorderedList"
+        },
+        {
+          "$ref": "#/$defs/blockOrderedList"
+        }
+      ]
+    },
+    "richText": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/block"
+          }
+        }
+      },
+      "required": [
+        "blocks"
+      ]
+    },
+    "textSource": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "literal"
+            },
+            "value": {
+              "$ref": "#/$defs/richText"
+            }
+          },
+          "required": [
+            "type",
+            "value"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "message"
+            },
+            "key": {
+              "$ref": "#/$defs/stableId"
+            }
+          },
+          "required": [
+            "type",
+            "key"
+          ]
+        }
+      ]
+    },
+    "textPath": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/stableId"
+        },
+        "start_offset": {
+          "$ref": "#/$defs/finiteNumber"
+        },
+        "alignment": {
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "forward",
+            "reverse"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "start_offset",
+        "alignment",
+        "direction"
+      ]
+    },
+    "textPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/textSource"
+        },
+        "defaults": {
+          "$ref": "#/$defs/textStyle"
+        },
+        "align_horizontal": {
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "justify"
+          ]
+        },
+        "align_vertical": {
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "wrap": {
+          "enum": [
+            "wrap",
+            "nowrap"
+          ]
+        },
+        "overflow": {
+          "enum": [
+            "clip",
+            "ellipsis"
+          ]
+        },
+        "text_path": {
+          "$ref": "#/$defs/textPath"
+        }
+      },
+      "required": [
+        "source",
+        "defaults",
+        "align_horizontal",
+        "align_vertical",
+        "wrap",
+        "overflow"
+      ]
+    },
+    "textPayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/textSource"
+        },
+        "defaults": {
+          "$ref": "#/$defs/textStyleOverrides"
+        },
+        "align_horizontal": {
+          "enum": [
+            "start",
+            "center",
+            "end",
+            "justify"
+          ]
+        },
+        "align_vertical": {
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        "wrap": {
+          "enum": [
+            "wrap",
+            "nowrap"
+          ]
+        },
+        "overflow": {
+          "enum": [
+            "clip",
+            "ellipsis"
+          ]
+        },
+        "text_path": {
+          "$ref": "#/$defs/textPath"
+        }
+      },
+      "required": []
+    },
+    "nineSlice": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "top": {
+          "$ref": "#/$defs/iJsonNonNegativeInteger"
+        },
+        "right": {
+          "$ref": "#/$defs/iJsonNonNegativeInteger"
+        },
+        "bottom": {
+          "$ref": "#/$defs/iJsonNonNegativeInteger"
+        },
+        "left": {
+          "$ref": "#/$defs/iJsonNonNegativeInteger"
+        }
+      },
+      "required": [
+        "top",
+        "right",
+        "bottom",
+        "left"
+      ]
+    },
+    "imagePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "$ref": "#/$defs/imageOrVectorAssetId"
+        },
+        "intrinsic_width": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "intrinsic_height": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "fit": {
+          "enum": [
+            "contain",
+            "cover",
+            "fill",
+            "none"
+          ]
+        },
+        "nine_slice": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nineSlice"
+            }
+          ]
+        },
+        "tint": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/colorValue"
+            }
+          ]
+        }
+      },
+      "required": [
+        "asset",
+        "intrinsic_width",
+        "intrinsic_height",
+        "fit",
+        "nine_slice",
+        "tint"
+      ]
+    },
+    "imagePayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "$ref": "#/$defs/imageOrVectorAssetId"
+        },
+        "intrinsic_width": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "intrinsic_height": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "fit": {
+          "enum": [
+            "contain",
+            "cover",
+            "fill",
+            "none"
+          ]
+        },
+        "nine_slice": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/nineSlice"
+            }
+          ]
+        },
+        "tint": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/colorValue"
+            }
+          ]
+        }
+      },
+      "required": []
+    },
+    "fallbackPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "$ref": "#/$defs/rasterFallbackAssetId"
+        },
+        "intrinsic_width": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "intrinsic_height": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        }
+      },
+      "required": [
+        "asset",
+        "intrinsic_width",
+        "intrinsic_height"
+      ]
+    },
+    "fallbackPayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "asset": {
+          "$ref": "#/$defs/rasterFallbackAssetId"
+        },
+        "intrinsic_width": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        },
+        "intrinsic_height": {
+          "$ref": "#/$defs/iJsonPositiveInteger"
+        }
+      },
+      "required": []
+    },
+    "stroke": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "$ref": "#/$defs/colorValue"
+        },
+        "width": {
+          "$ref": "#/$defs/lengthPxNonNegativeOrToken"
+        },
+        "cap": {
+          "enum": [
+            "butt",
+            "round",
+            "square"
+          ]
+        },
+        "join": {
+          "enum": [
+            "miter",
+            "round",
+            "bevel"
+          ]
+        },
+        "miter_limit": {
+          "$ref": "#/$defs/miterLimitValue"
+        },
+        "dash": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonNegativeNumberValue"
+          }
+        },
+        "dash_offset": {
+          "$ref": "#/$defs/numberValue"
+        }
+      },
+      "required": [
+        "color",
+        "width",
+        "cap",
+        "join",
+        "miter_limit",
+        "dash",
+        "dash_offset"
+      ]
+    },
+    "vectorLayer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/stableId"
+        },
+        "fills": {
+          "$ref": "#/$defs/fills"
+        },
+        "strokes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stroke"
+          }
+        }
+      },
+      "required": [
+        "path",
+        "fills",
+        "strokes"
+      ]
+    },
+    "vectorPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vectorLayer"
+          }
+        }
+      },
+      "required": [
+        "layers"
+      ]
+    },
+    "vectorPayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/vectorLayer"
+          }
+        }
+      },
+      "required": []
+    },
+    "containerPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {},
+      "required": []
+    },
+    "slotPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/stableId"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "slotPayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {},
+      "required": []
+    },
+    "nodePatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visible": {
+          "type": "boolean"
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        },
+        "container": {
+          "$ref": "#/$defs/containerPayload"
+        },
+        "text": {
+          "$ref": "#/$defs/textPayloadPatch"
+        },
+        "image": {
+          "$ref": "#/$defs/imagePayloadPatch"
+        },
+        "vector": {
+          "$ref": "#/$defs/vectorPayloadPatch"
+        },
+        "fallback": {
+          "$ref": "#/$defs/fallbackPayloadPatch"
+        },
+        "component_instance": {
+          "$ref": "#/$defs/componentInstancePayloadPatch"
+        },
+        "slot": {
+          "$ref": "#/$defs/slotPayloadPatch"
+        }
+      },
+      "required": []
+    },
+    "patchMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/templateId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/nodePatch"
+      }
+    },
+    "variantMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/stableId"
+      }
+    },
+    "slotFillMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/sourceId"
+        }
+      }
+    },
+    "templateSlotFillMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/templateId"
+        }
+      }
+    },
+    "componentInstancePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "definition": {
+          "$ref": "#/$defs/stableId"
+        },
+        "variants": {
+          "$ref": "#/$defs/variantMap"
+        },
+        "slots": {
+          "$ref": "#/$defs/slotFillMap"
+        },
+        "overrides": {
+          "$ref": "#/$defs/patchMap"
+        }
+      },
+      "required": [
+        "definition",
+        "variants",
+        "slots",
+        "overrides"
+      ]
+    },
+    "componentInstancePayloadPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "definition": {
+          "$ref": "#/$defs/stableId"
+        },
+        "variants": {
+          "$ref": "#/$defs/variantMap"
+        },
+        "slots": {
+          "$ref": "#/$defs/templateSlotFillMap"
+        },
+        "overrides": {
+          "$ref": "#/$defs/patchMap"
+        }
+      },
+      "required": []
+    },
+    "templateComponentInstancePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "definition": {
+          "$ref": "#/$defs/stableId"
+        },
+        "variants": {
+          "$ref": "#/$defs/variantMap"
+        },
+        "slots": {
+          "$ref": "#/$defs/templateSlotFillMap"
+        },
+        "overrides": {
+          "$ref": "#/$defs/patchMap"
+        }
+      },
+      "required": [
+        "definition",
+        "variants",
+        "slots",
+        "overrides"
+      ]
+    },
+    "responsiveOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visible": {
+          "type": "boolean"
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        }
+      },
+      "required": []
+    },
+    "responsive": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/responsiveOverride"
+      }
+    },
+    "mask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "operation",
+        "invert"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/stableId"
+        },
+        "asset": {
+          "$ref": "#/$defs/imageOrVectorAssetId"
+        },
+        "mode": {
+          "enum": [
+            "alpha",
+            "luminance"
+          ]
+        },
+        "operation": {
+          "enum": [
+            "intersect",
+            "add",
+            "subtract"
+          ]
+        },
+        "invert": {
+          "type": "boolean"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "asset": false
+          }
+        },
+        {
+          "required": [
+            "asset"
+          ],
+          "properties": {
+            "path": false
+          }
+        }
+      ]
+    },
+    "masks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/mask"
+      }
+    },
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "container",
+            "text",
+            "image",
+            "vector",
+            "fallback",
+            "component_instance"
+          ]
+        },
+        "source_id": {
+          "$ref": "#/$defs/sourceId"
+        },
+        "runtime_id": {
+          "$ref": "#/$defs/runtimeId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sourceId"
+          }
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        },
+        "responsive": {
+          "$ref": "#/$defs/responsive"
+        },
+        "masks": {
+          "$ref": "#/$defs/masks"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensionMap"
+        },
+        "container": {
+          "$ref": "#/$defs/containerPayload"
+        },
+        "text": {
+          "$ref": "#/$defs/textPayload"
+        },
+        "image": {
+          "$ref": "#/$defs/imagePayload"
+        },
+        "vector": {
+          "$ref": "#/$defs/vectorPayload"
+        },
+        "fallback": {
+          "$ref": "#/$defs/fallbackPayload"
+        },
+        "component_instance": {
+          "$ref": "#/$defs/componentInstancePayload"
+        }
+      },
+      "required": [
+        "type",
+        "source_id",
+        "visible",
+        "children",
+        "layout",
+        "style",
+        "extensions"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "container"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "container"
+            ],
+            "properties": {
+              "text": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "text"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "container": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "image"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "vector"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "vector"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "fallback": false,
+              "component_instance": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fallback"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "fallback"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "vector": false,
+              "component_instance": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "component_instance"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "component_instance"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "nodeMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/sourceId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/node"
+      },
+      "minProperties": 1
+    },
+    "templateNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "container",
+            "text",
+            "image",
+            "vector",
+            "fallback",
+            "component_instance",
+            "slot"
+          ]
+        },
+        "template_id": {
+          "$ref": "#/$defs/templateId"
+        },
+        "runtime_part_id": {
+          "$ref": "#/$defs/runtimePartId"
+        },
+        "name": {
+          "type": "string"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/templateId"
+          }
+        },
+        "layout": {
+          "$ref": "#/$defs/layout"
+        },
+        "style": {
+          "$ref": "#/$defs/style"
+        },
+        "responsive": {
+          "$ref": "#/$defs/responsive"
+        },
+        "masks": {
+          "$ref": "#/$defs/masks"
+        },
+        "extensions": {
+          "$ref": "#/$defs/extensionMap"
+        },
+        "container": {
+          "$ref": "#/$defs/containerPayload"
+        },
+        "text": {
+          "$ref": "#/$defs/textPayload"
+        },
+        "image": {
+          "$ref": "#/$defs/imagePayload"
+        },
+        "vector": {
+          "$ref": "#/$defs/vectorPayload"
+        },
+        "fallback": {
+          "$ref": "#/$defs/fallbackPayload"
+        },
+        "component_instance": {
+          "$ref": "#/$defs/templateComponentInstancePayload"
+        },
+        "slot": {
+          "$ref": "#/$defs/slotPayload"
+        }
+      },
+      "required": [
+        "type",
+        "template_id",
+        "visible",
+        "children",
+        "layout",
+        "style",
+        "extensions"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "container"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "container"
+            ],
+            "properties": {
+              "text": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "slot": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "text"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "container": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "slot": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "image"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "image"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "slot": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "vector"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "vector"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "fallback": false,
+              "component_instance": false,
+              "slot": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fallback"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "fallback"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "vector": false,
+              "component_instance": false,
+              "slot": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "component_instance"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "component_instance"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "slot": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "slot"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "slot"
+            ],
+            "properties": {
+              "container": false,
+              "text": false,
+              "image": false,
+              "vector": false,
+              "fallback": false,
+              "component_instance": false,
+              "children": {
+                "type": "array",
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "nullableNonNegative": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/nonNegativeNumber"
+        }
+      ]
+    },
+    "breakpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "min_width": {
+          "$ref": "#/$defs/nullableNonNegative"
+        },
+        "max_width": {
+          "$ref": "#/$defs/nullableNonNegative"
+        }
+      },
+      "required": [
+        "min_width",
+        "max_width"
+      ],
+      "not": {
+        "properties": {
+          "min_width": {
+            "type": "null"
+          },
+          "max_width": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "min_width",
+          "max_width"
+        ]
+      }
+    },
+    "breakpointMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/breakpoint"
+      }
+    },
+    "token": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "color",
+            "number",
+            "length",
+            "string",
+            "font"
+          ]
+        },
+        "value": true
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "color"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/colorLiteral"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "number"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/finiteNumber"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "length"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/lengthCatalog"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "string"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "font"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/fontAssetId"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tokenMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/token"
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "extends": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/stableId"
+            }
+          ]
+        },
+        "values": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "extends",
+        "values"
+      ]
+    },
+    "themes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/stableId"
+            }
+          ]
+        },
+        "items": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/theme"
+          }
+        }
+      },
+      "required": [
+        "default",
+        "items"
+      ]
+    },
+    "locale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fallback": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/localeId"
+            }
+          ]
+        },
+        "messages": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/richText"
+          }
+        }
+      },
+      "required": [
+        "fallback",
+        "messages"
+      ]
+    },
+    "localization": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "default_locale": {
+          "$ref": "#/$defs/localeId"
+        },
+        "locales": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/localeId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/locale"
+          }
+        }
+      },
+      "required": [
+        "default_locale",
+        "locales"
+      ]
+    },
+    "pathCommand": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "move"
+            },
+            "x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "y": {
+              "$ref": "#/$defs/finiteNumber"
+            }
+          },
+          "required": [
+            "type",
+            "x",
+            "y"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "line"
+            },
+            "x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "y": {
+              "$ref": "#/$defs/finiteNumber"
+            }
+          },
+          "required": [
+            "type",
+            "x",
+            "y"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "quadratic"
+            },
+            "cx": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "cy": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "y": {
+              "$ref": "#/$defs/finiteNumber"
+            }
+          },
+          "required": [
+            "type",
+            "cx",
+            "cy",
+            "x",
+            "y"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "cubic"
+            },
+            "c1x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "c1y": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "c2x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "c2y": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "x": {
+              "$ref": "#/$defs/finiteNumber"
+            },
+            "y": {
+              "$ref": "#/$defs/finiteNumber"
+            }
+          },
+          "required": [
+            "type",
+            "c1x",
+            "c1y",
+            "c2x",
+            "c2y",
+            "x",
+            "y"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "const": "close"
+            }
+          },
+          "required": [
+            "type"
+          ]
+        }
+      ]
+    },
+    "path": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/pathCommand"
+          }
+        },
+        "fill_rule": {
+          "enum": [
+            "nonzero",
+            "evenodd"
+          ]
+        }
+      },
+      "required": [
+        "commands",
+        "fill_rule"
+      ]
+    },
+    "pathMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/path"
+      }
+    },
+    "slotDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "allows_multiple": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "required",
+        "allows_multiple"
+      ]
+    },
+    "variantAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/stableId"
+        },
+        "default": {
+          "$ref": "#/$defs/stableId"
+        },
+        "values": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/patchMap"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "default",
+        "values"
+      ]
+    },
+    "componentDefinition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "root": {
+          "$ref": "#/$defs/templateId"
+        },
+        "nodes": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/templateId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/templateNode"
+          },
+          "minProperties": 1
+        },
+        "slots": {
+          "type": "object",
+          "propertyNames": {
+            "$ref": "#/$defs/stableId"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/slotDefinition"
+          }
+        },
+        "variant_axes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/variantAxis"
+          }
+        }
+      },
+      "required": [
+        "root",
+        "nodes",
+        "slots",
+        "variant_axes"
+      ]
+    },
+    "componentMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/stableId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/componentDefinition"
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "breakpoints": {
+          "$ref": "#/$defs/breakpointMap"
+        },
+        "tokens": {
+          "$ref": "#/$defs/tokenMap"
+        },
+        "themes": {
+          "$ref": "#/$defs/themes"
+        },
+        "localization": {
+          "$ref": "#/$defs/localization"
+        },
+        "paths": {
+          "$ref": "#/$defs/pathMap"
+        },
+        "components": {
+          "$ref": "#/$defs/componentMap"
+        }
+      },
+      "required": []
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "image",
+            "font",
+            "vector",
+            "raster_fallback"
+          ]
+        },
+        "uri": {
+          "$ref": "#/$defs/assetUri"
+        },
+        "mime_type": {
+          "enum": [
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+            "font/ttf",
+            "font/otf",
+            "font/woff2",
+            "image/svg+xml"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "byte_length": {
+          "$ref": "#/$defs/iJsonNonNegativeInteger"
+        }
+      },
+      "required": [
+        "kind",
+        "uri",
+        "mime_type",
+        "sha256",
+        "byte_length"
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "kind": {
+              "const": "image"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^images/[a-f0-9]{64}\\.png$"
+            },
+            "mime_type": {
+              "const": "image/png"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "image"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^images/[a-f0-9]{64}\\.jpg$"
+            },
+            "mime_type": {
+              "const": "image/jpeg"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "image"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^images/[a-f0-9]{64}\\.webp$"
+            },
+            "mime_type": {
+              "const": "image/webp"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "font"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^fonts/[a-f0-9]{64}\\.ttf$"
+            },
+            "mime_type": {
+              "const": "font/ttf"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "font"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^fonts/[a-f0-9]{64}\\.otf$"
+            },
+            "mime_type": {
+              "const": "font/otf"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "font"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^fonts/[a-f0-9]{64}\\.woff2$"
+            },
+            "mime_type": {
+              "const": "font/woff2"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "vector"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^vectors/[a-f0-9]{64}\\.svg$"
+            },
+            "mime_type": {
+              "const": "image/svg+xml"
+            }
+          }
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "raster_fallback"
+            },
+            "uri": {
+              "type": "string",
+              "pattern": "^fallback/[a-f0-9]{64}\\.png$"
+            },
+            "mime_type": {
+              "const": "image/png"
+            }
+          }
+        }
+      ]
+    },
+    "assetMap": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/assetId"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/asset"
+      }
+    },
+    "diagnosticCode": {
+      "enum": [
+        "opui.schema",
+        "opui.encoding",
+        "opui.duplicate_json_key",
+        "opui.key_order",
+        "opui.indent",
+        "opui.non_finite",
+        "opui.negative_zero",
+        "opui.number_normalization",
+        "opui.duplicate_runtime_id",
+        "opui.node_key_mismatch",
+        "opui.asset_key_mismatch",
+        "opui.unknown_child",
+        "opui.duplicate_child",
+        "opui.multiple_parents",
+        "opui.cycle",
+        "opui.unreachable_node",
+        "opui.unknown_entrypoint",
+        "opui.entrypoint_not_root",
+        "opui.package_name",
+        "opui.unresolved_asset",
+        "opui.unresolved_font",
+        "opui.unresolved_image",
+        "opui.asset_kind_mismatch",
+        "opui.asset_id_rule",
+        "opui.asset_uri_rule",
+        "opui.asset_mime_mapping",
+        "opui.asset_hash_mismatch",
+        "opui.asset_byte_length",
+        "opui.asset_missing",
+        "opui.network_uri",
+        "opui.embedded_data",
+        "opui.svg_invalid",
+        "opui.svg_script",
+        "opui.svg_animation",
+        "opui.svg_event",
+        "opui.svg_foreign_object",
+        "opui.svg_dtd",
+        "opui.svg_css",
+        "opui.svg_external_ref",
+        "opui.text_run_range",
+        "opui.text_run_overlap",
+        "opui.text_run_empty",
+        "opui.text_run_order",
+        "opui.text_run_scalar",
+        "opui.font_unavailable",
+        "opui.length_context",
+        "opui.nine_slice_bounds",
+        "opui.gradient_stop_order",
+        "opui.unsupported_native",
+        "opui.unsupported_raster_fallback",
+        "opui.unsupported_error",
+        "opui.mask_unsupported",
+        "opui.effect_unsupported",
+        "opui.path_unsupported",
+        "opui.rasterization",
+        "opui.fallback_diagnostic_count",
+        "opui.diagnostic_node",
+        "opui.diagnostic_runtime_id",
+        "opui.diagnostic_order",
+        "opui.diagnostic_strategy",
+        "opui.unknown_breakpoint",
+        "opui.breakpoint_bounds",
+        "opui.breakpoint_overlap",
+        "opui.unknown_token",
+        "opui.token_kind_mismatch",
+        "opui.token_cycle",
+        "opui.unknown_theme",
+        "opui.theme_cycle",
+        "opui.theme_value_kind",
+        "opui.theme_default",
+        "opui.unknown_locale",
+        "opui.locale_cycle",
+        "opui.unknown_message",
+        "opui.locale_default",
+        "opui.unknown_path",
+        "opui.path_commands",
+        "opui.unknown_mask_path",
+        "opui.mask_source",
+        "opui.mask_asset_kind",
+        "opui.unknown_component",
+        "opui.component_cycle",
+        "opui.unknown_template_node",
+        "opui.template_key_mismatch",
+        "opui.component_root",
+        "opui.unknown_slot",
+        "opui.slot_required",
+        "opui.slot_multiple",
+        "opui.unknown_variant_axis",
+        "opui.unknown_variant_value",
+        "opui.variant_default",
+        "opui.expanded_runtime_id",
+        "opui.duplicate_expanded_runtime_id",
+        "opui.template_unreachable",
+        "opui.template_cycle",
+        "opui.template_unknown_child",
+        "opui.template_duplicate_child",
+        "opui.template_multiple_parents",
+        "opui.rich_text_empty",
+        "opui.text_path_incompatible",
+        "opui.text_path_unknown",
+        "opui.unresolved_inline_image"
+      ]
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/diagnosticCode"
+        },
+        "severity": {
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ]
+        },
+        "node_id": {
+          "$ref": "#/$defs/nullableSourceId"
+        },
+        "runtime_id": {
+          "$ref": "#/$defs/nullableRuntimeId"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "strategy": {
+          "enum": [
+            "native",
+            "raster_fallback",
+            "error",
+            "none"
+          ]
+        },
+        "details": {
+          "$ref": "#/$defs/extensionMap"
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "node_id",
+        "runtime_id",
+        "message",
+        "strategy",
+        "details"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "strategy": {
+                "const": "error"
+              }
+            },
+            "required": [
+              "strategy"
+            ]
+          },
+          "then": {
+            "properties": {
+              "severity": {
+                "const": "error"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

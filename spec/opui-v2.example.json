@@ -1,0 +1,967 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "opui-v2.example",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {
+    "org.openpencil.example": {
+      "complete": true
+    }
+  },
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "2.0.0"
+  },
+  "nodes": {
+    "caption": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "source_id": "caption",
+      "style": {},
+      "text": {
+        "align_horizontal": "end",
+        "align_vertical": "end",
+        "defaults": {
+          "color": {
+            "token": "color.fg"
+          },
+          "family": {
+            "token": "font.ui"
+          },
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "multiple",
+            "value": 1.4
+          },
+          "size": {
+            "type": "px",
+            "value": 12
+          },
+          "weight": 400
+        },
+        "overflow": "clip",
+        "source": {
+          "key": "caption.path",
+          "type": "message"
+        },
+        "text_path": {
+          "alignment": "start",
+          "direction": "forward",
+          "path": "wave",
+          "start_offset": 0
+        },
+        "wrap": "wrap"
+      },
+      "type": "text",
+      "visible": true
+    },
+    "cta": {
+      "children": [],
+      "component_instance": {
+        "definition": "Button",
+        "overrides": {
+          "label": {
+            "text": {
+              "source": {
+                "key": "cta.label",
+                "type": "message"
+              }
+            }
+          }
+        },
+        "slots": {
+          "icon": [
+            "ctaIcon"
+          ]
+        },
+        "variants": {
+          "size": "sm"
+        }
+      },
+      "extensions": {},
+      "layout": {
+        "height": {
+          "type": "px",
+          "value": 40
+        },
+        "width": {
+          "type": "fill",
+          "weight": 1
+        }
+      },
+      "runtime_id": "cta",
+      "source_id": "cta",
+      "style": {
+        "blend_mode": "normal",
+        "fills": [
+          {
+            "color": {
+              "token": "color.accent"
+            },
+            "type": "solid"
+          }
+        ]
+      },
+      "type": "component_instance",
+      "visible": true
+    },
+    "ctaIcon": {
+      "children": [],
+      "extensions": {},
+      "layout": {
+        "height": {
+          "type": "px",
+          "value": 16
+        },
+        "width": {
+          "type": "px",
+          "value": 16
+        }
+      },
+      "source_id": "ctaIcon",
+      "style": {},
+      "type": "vector",
+      "vector": {
+        "layers": [
+          {
+            "fills": [
+              {
+                "color": {
+                  "token": "color.fg"
+                },
+                "type": "solid"
+              }
+            ],
+            "path": "check",
+            "strokes": []
+          }
+        ]
+      },
+      "visible": true
+    },
+    "fixed": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "display": "absolute",
+        "height": {
+          "type": "px",
+          "value": 40
+        },
+        "position": "absolute",
+        "width": {
+          "type": "percent",
+          "value": 20
+        }
+      },
+      "source_id": "fixed",
+      "style": {
+        "fills": [
+          {
+            "color": {
+              "a": 1,
+              "b": 0.8,
+              "g": 0.5,
+              "r": 0.3,
+              "space": "srgb"
+            },
+            "type": "solid"
+          }
+        ],
+        "rotation": {
+          "degrees": -3
+        },
+        "scale": {
+          "x": 1.05,
+          "y": 1.05
+        },
+        "skew": {
+          "x": 2,
+          "y": 0
+        },
+        "translation": {
+          "x": {
+            "type": "px",
+            "value": 2
+          },
+          "y": {
+            "type": "px",
+            "value": 0
+          }
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "hero": {
+      "children": [
+        "title"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "display": "grid",
+        "grid_template_columns": [
+          {
+            "type": "fr",
+            "value": 1
+          },
+          {
+            "max": {
+              "type": "auto"
+            },
+            "min": {
+              "type": "px",
+              "value": 40
+            },
+            "type": "minmax"
+          }
+        ],
+        "height": {
+          "type": "px",
+          "value": 120
+        },
+        "width": {
+          "type": "fill",
+          "weight": 1
+        }
+      },
+      "responsive": {
+        "md": {
+          "layout": {
+            "display": "flex",
+            "flex_direction": "column"
+          }
+        },
+        "sm": {
+          "visible": true
+        }
+      },
+      "runtime_id": "hero",
+      "source_id": "hero",
+      "style": {
+        "borders": {
+          "bottom": {
+            "color": {
+              "a": 0.2,
+              "b": 0,
+              "g": 0,
+              "r": 0,
+              "space": "srgb"
+            },
+            "style": "solid",
+            "width": {
+              "type": "px",
+              "value": 1
+            }
+          }
+        },
+        "fills": [
+          {
+            "center": {
+              "x": 0.5,
+              "y": 0.5
+            },
+            "radius": {
+              "x": 0.8,
+              "y": 0.6
+            },
+            "stops": [
+              {
+                "color": {
+                  "a": 1,
+                  "b": 1,
+                  "g": 0.97,
+                  "r": 0.95,
+                  "space": "srgb"
+                },
+                "offset": 0
+              },
+              {
+                "color": {
+                  "a": 1,
+                  "b": 0.95,
+                  "g": 0.82,
+                  "r": 0.75,
+                  "space": "srgb"
+                },
+                "offset": 1
+              }
+            ],
+            "type": "radial"
+          }
+        ],
+        "filters": [
+          {
+            "type": "saturate",
+            "value": 1.05
+          },
+          {
+            "type": "contrast",
+            "value": 1
+          }
+        ],
+        "shadows": [
+          {
+            "blur": {
+              "type": "px",
+              "value": 8
+            },
+            "color": {
+              "a": 0.15,
+              "b": 0,
+              "g": 0,
+              "r": 0,
+              "space": "srgb"
+            },
+            "kind": "outer",
+            "offset_x": {
+              "type": "px",
+              "value": 0
+            },
+            "offset_y": {
+              "type": "px",
+              "value": 2
+            },
+            "spread": {
+              "type": "px",
+              "value": 0
+            }
+          },
+          {
+            "blur": {
+              "type": "px",
+              "value": 2
+            },
+            "color": {
+              "a": 0.35,
+              "b": 1,
+              "g": 1,
+              "r": 1,
+              "space": "srgb"
+            },
+            "kind": "inner",
+            "offset_x": {
+              "type": "px",
+              "value": 0
+            },
+            "offset_y": {
+              "type": "px",
+              "value": 1
+            },
+            "spread": {
+              "type": "px",
+              "value": 0
+            }
+          }
+        ]
+      },
+      "type": "container",
+      "visible": true
+    },
+    "mark": {
+      "children": [],
+      "extensions": {},
+      "layout": {
+        "height": {
+          "type": "px",
+          "value": 48
+        },
+        "width": {
+          "type": "px",
+          "value": 48
+        }
+      },
+      "masks": [
+        {
+          "invert": false,
+          "mode": "alpha",
+          "operation": "intersect",
+          "path": "check"
+        }
+      ],
+      "runtime_id": "mark",
+      "source_id": "mark",
+      "style": {
+        "blend_mode": "multiply",
+        "opacity": {
+          "token": "opacity.muted"
+        }
+      },
+      "type": "vector",
+      "vector": {
+        "layers": [
+          {
+            "fills": [
+              {
+                "color": {
+                  "token": "color.accent"
+                },
+                "type": "solid"
+              }
+            ],
+            "path": "check",
+            "strokes": [
+              {
+                "cap": "round",
+                "color": {
+                  "token": "color.fg"
+                },
+                "dash": [
+                  2,
+                  1
+                ],
+                "dash_offset": 0,
+                "join": "round",
+                "miter_limit": 4,
+                "width": {
+                  "type": "px",
+                  "value": 1
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "visible": true
+    },
+    "root": {
+      "children": [
+        "hero",
+        "stack",
+        "caption"
+      ],
+      "container": {},
+      "extensions": {
+        "org.openpencil.meta": {
+          "kind": "example"
+        }
+      },
+      "layout": {
+        "display": "flex",
+        "flex_direction": "column",
+        "gap": {
+          "column": {
+            "type": "px",
+            "value": 0
+          },
+          "row": {
+            "token": "space.md"
+          }
+        },
+        "overflow_x": "visible",
+        "overflow_y": "visible",
+        "padding": {
+          "bottom": {
+            "token": "space.lg"
+          },
+          "left": {
+            "token": "space.lg"
+          },
+          "right": {
+            "token": "space.lg"
+          },
+          "top": {
+            "token": "space.lg"
+          }
+        },
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "root",
+      "style": {
+        "fills": [
+          {
+            "color": {
+              "token": "color.bg"
+            },
+            "type": "solid"
+          }
+        ]
+      },
+      "type": "container",
+      "visible": true
+    },
+    "stack": {
+      "children": [
+        "mark",
+        "cta",
+        "fixed"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "align_items": "center",
+        "display": "flex",
+        "flex_direction": "row",
+        "gap": {
+          "column": {
+            "type": "percent",
+            "value": 4
+          },
+          "row": {
+            "type": "px",
+            "value": 0
+          }
+        },
+        "overflow_x": "auto",
+        "overflow_y": "visible",
+        "scrollbar": {
+          "overscroll": "contain",
+          "visibility": "auto"
+        },
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "stack",
+      "style": {},
+      "type": "container",
+      "visible": true
+    },
+    "title": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "runtime_id": "hero/title",
+      "source_id": "title",
+      "style": {},
+      "text": {
+        "align_horizontal": "start",
+        "align_vertical": "center",
+        "defaults": {
+          "color": {
+            "token": "color.fg"
+          },
+          "family": {
+            "token": "font.ui"
+          },
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "normal"
+          },
+          "size": {
+            "type": "px",
+            "value": 24
+          },
+          "weight": 500
+        },
+        "overflow": "ellipsis",
+        "source": {
+          "type": "literal",
+          "value": {
+            "blocks": [
+              {
+                "spans": [
+                  {
+                    "style": {
+                      "weight": 800
+                    },
+                    "type": "text",
+                    "value": "A"
+                  },
+                  {
+                    "style": {
+                      "font_style": "italic"
+                    },
+                    "type": "text",
+                    "value": "👋é"
+                  },
+                  {
+                    "type": "text",
+                    "value": "B"
+                  }
+                ],
+                "type": "paragraph"
+              },
+              {
+                "items": [
+                  {
+                    "spans": [
+                      {
+                        "type": "text",
+                        "value": "one"
+                      }
+                    ]
+                  },
+                  {
+                    "spans": [
+                      {
+                        "type": "text",
+                        "value": "two"
+                      }
+                    ]
+                  }
+                ],
+                "type": "unordered_list"
+              },
+              {
+                "items": [
+                  {
+                    "spans": [
+                      {
+                        "type": "text",
+                        "value": "first"
+                      }
+                    ]
+                  }
+                ],
+                "start": 1,
+                "type": "ordered_list"
+              }
+            ]
+          }
+        },
+        "wrap": "nowrap"
+      },
+      "type": "text",
+      "visible": true
+    }
+  },
+  "resources": {
+    "breakpoints": {
+      "md": {
+        "max_width": null,
+        "min_width": 600
+      },
+      "sm": {
+        "max_width": 600,
+        "min_width": null
+      }
+    },
+    "components": {
+      "Button": {
+        "nodes": {
+          "btn": {
+            "children": [
+              "iconSlot",
+              "label"
+            ],
+            "container": {},
+            "extensions": {},
+            "layout": {
+              "align_items": "center",
+              "display": "flex",
+              "flex_direction": "row",
+              "gap": {
+                "column": {
+                  "token": "space.md"
+                },
+                "row": {
+                  "type": "px",
+                  "value": 0
+                }
+              }
+            },
+            "runtime_part_id": "root",
+            "style": {},
+            "template_id": "btn",
+            "type": "container",
+            "visible": true
+          },
+          "iconSlot": {
+            "children": [],
+            "extensions": {},
+            "layout": {},
+            "runtime_part_id": "icon",
+            "slot": {
+              "name": "icon"
+            },
+            "style": {},
+            "template_id": "iconSlot",
+            "type": "slot",
+            "visible": true
+          },
+          "label": {
+            "children": [],
+            "extensions": {},
+            "layout": {},
+            "runtime_part_id": "label",
+            "style": {},
+            "template_id": "label",
+            "text": {
+              "align_horizontal": "start",
+              "align_vertical": "center",
+              "defaults": {
+                "color": {
+                  "token": "color.fg"
+                },
+                "family": {
+                  "token": "font.ui"
+                },
+                "font_style": "normal",
+                "letter_spacing": {
+                  "type": "px",
+                  "value": 0
+                },
+                "line_height": {
+                  "type": "normal"
+                },
+                "size": {
+                  "type": "px",
+                  "value": 14
+                },
+                "weight": 600
+              },
+              "overflow": "clip",
+              "source": {
+                "type": "literal",
+                "value": {
+                  "blocks": [
+                    {
+                      "spans": [
+                        {
+                          "type": "text",
+                          "value": "OK"
+                        }
+                      ],
+                      "type": "paragraph"
+                    }
+                  ]
+                }
+              },
+              "wrap": "wrap"
+            },
+            "type": "text",
+            "visible": true
+          }
+        },
+        "root": "btn",
+        "slots": {
+          "icon": {
+            "allows_multiple": false,
+            "required": false
+          }
+        },
+        "variant_axes": [
+          {
+            "default": "md",
+            "name": "size",
+            "values": {
+              "md": {},
+              "sm": {
+                "label": {
+                  "text": {
+                    "defaults": {
+                      "size": {
+                        "type": "px",
+                        "value": 12
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "localization": {
+      "default_locale": "en",
+      "locales": {
+        "de": {
+          "fallback": "en",
+          "messages": {
+            "cta.label": {
+              "blocks": [
+                {
+                  "spans": [
+                    {
+                      "type": "text",
+                      "value": "Los"
+                    }
+                  ],
+                  "type": "paragraph"
+                }
+              ]
+            }
+          }
+        },
+        "en": {
+          "fallback": null,
+          "messages": {
+            "caption.path": {
+              "blocks": [
+                {
+                  "spans": [
+                    {
+                      "type": "text",
+                      "value": "example"
+                    }
+                  ],
+                  "type": "paragraph"
+                }
+              ]
+            },
+            "cta.label": {
+              "blocks": [
+                {
+                  "spans": [
+                    {
+                      "type": "text",
+                      "value": "Go"
+                    }
+                  ],
+                  "type": "paragraph"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "paths": {
+      "check": {
+        "commands": [
+          {
+            "type": "move",
+            "x": 0.2,
+            "y": 0.55
+          },
+          {
+            "type": "line",
+            "x": 0.42,
+            "y": 0.78
+          },
+          {
+            "c1x": 0.55,
+            "c1y": 0.6,
+            "c2x": 0.7,
+            "c2y": 0.35,
+            "type": "cubic",
+            "x": 0.85,
+            "y": 0.22
+          },
+          {
+            "type": "close"
+          }
+        ],
+        "fill_rule": "nonzero"
+      },
+      "wave": {
+        "commands": [
+          {
+            "type": "move",
+            "x": 0,
+            "y": 0.5
+          },
+          {
+            "c1x": 0.25,
+            "c1y": 0.1,
+            "c2x": 0.75,
+            "c2y": 0.9,
+            "type": "cubic",
+            "x": 1,
+            "y": 0.5
+          }
+        ],
+        "fill_rule": "evenodd"
+      }
+    },
+    "themes": {
+      "default": "light",
+      "items": {
+        "dark": {
+          "extends": "light",
+          "values": {
+            "color.bg": {
+              "a": 1,
+              "b": 0.1,
+              "g": 0.08,
+              "r": 0.08,
+              "space": "srgb"
+            },
+            "color.fg": {
+              "a": 1,
+              "b": 0.94,
+              "g": 0.92,
+              "r": 0.92,
+              "space": "srgb"
+            }
+          }
+        },
+        "light": {
+          "extends": null,
+          "values": {}
+        }
+      }
+    },
+    "tokens": {
+      "color.accent": {
+        "kind": "color",
+        "value": {
+          "a": 1,
+          "b": 0.4,
+          "g": 0.35,
+          "r": 0.2,
+          "space": "srgb"
+        }
+      },
+      "color.bg": {
+        "kind": "color",
+        "value": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1,
+          "space": "srgb"
+        }
+      },
+      "color.fg": {
+        "kind": "color",
+        "value": {
+          "a": 1,
+          "b": 0.1,
+          "g": 0.1,
+          "r": 0.1,
+          "space": "srgb"
+        }
+      },
+      "font.ui": {
+        "kind": "string",
+        "value": "Inter"
+      },
+      "opacity.muted": {
+        "kind": "number",
+        "value": 0.8
+      },
+      "space.lg": {
+        "kind": "length",
+        "value": {
+          "type": "px",
+          "value": 24
+        }
+      },
+      "space.md": {
+        "kind": "length",
+        "value": {
+          "type": "px",
+          "value": 16
+        }
+      }
+    }
+  },
+  "schema_version": 2
+}

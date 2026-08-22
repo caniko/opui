@@ -6,7 +6,7 @@ use clap::{Parser, Subcommand};
 use opui::{CheckOptions, canonical_bytes, check_path, format_diagnostics, parse_strict};
 
 #[derive(Parser)]
-#[command(name = "opui", about = "openpencil-runtime-ui v1 checker")]
+#[command(name = "opui", about = "openpencil-runtime-ui checker")]
 struct Cli {
     #[command(subcommand)]
     command: Command,
