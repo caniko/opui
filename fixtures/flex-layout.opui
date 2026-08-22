@@ -1,0 +1,160 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "flex-layout",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "grow": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "flex_grow": 1,
+        "height": {
+          "type": "fill",
+          "weight": 1
+        },
+        "width": {
+          "type": "fill",
+          "weight": 2
+        }
+      },
+      "source_id": "grow",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 0.95,
+            "g": 0.9,
+            "r": 0.9,
+            "space": "srgb"
+          },
+          "type": "solid"
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "label": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "source_id": "label",
+      "style": {},
+      "text": {
+        "align_horizontal": "center",
+        "align_vertical": "center",
+        "content": "Flex",
+        "defaults": {
+          "color": {
+            "a": 1,
+            "b": 0.1,
+            "g": 0.1,
+            "r": 0.1,
+            "space": "srgb"
+          },
+          "family": "Inter",
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "normal"
+          },
+          "size": {
+            "type": "px",
+            "value": 16
+          },
+          "weight": 600
+        },
+        "overflow": "clip",
+        "runs": [],
+        "wrap": "nowrap"
+      },
+      "type": "text",
+      "visible": true
+    },
+    "pct": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "height": {
+          "type": "percent",
+          "value": 50
+        },
+        "width": {
+          "type": "percent",
+          "value": 25
+        }
+      },
+      "source_id": "pct",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 0.9,
+            "g": 0.85,
+            "r": 0.8,
+            "space": "srgb"
+          },
+          "type": "solid"
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "root": {
+      "children": [
+        "grow",
+        "pct",
+        "label"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "align_items": "center",
+        "flex_direction": "row",
+        "gap": {
+          "column": {
+            "type": "px",
+            "value": 12
+          },
+          "row": {
+            "type": "px",
+            "value": 8
+          }
+        },
+        "height": {
+          "type": "percent",
+          "value": 100
+        },
+        "justify_content": "space_between",
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "root",
+      "style": {},
+      "type": "container",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

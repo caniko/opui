@@ -1,0 +1,47 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "cyclic-hierarchy",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "a"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "a": {
+      "children": [
+        "b"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {},
+      "source_id": "a",
+      "style": {},
+      "type": "container",
+      "visible": true
+    },
+    "b": {
+      "children": [
+        "a"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {},
+      "source_id": "b",
+      "style": {},
+      "type": "container",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

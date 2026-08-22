@@ -1,0 +1,142 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "component-instance",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "button": {
+      "children": [
+        "label"
+      ],
+      "component": {
+        "component_name": "Button",
+        "definition_source_id": "Button/Primary",
+        "role": "instance",
+        "variant_properties": {
+          "size": "lg",
+          "tone": "brand"
+        }
+      },
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "align_items": "center",
+        "justify_content": "center",
+        "padding": {
+          "bottom": {
+            "type": "px",
+            "value": 12
+          },
+          "left": {
+            "type": "px",
+            "value": 12
+          },
+          "right": {
+            "type": "px",
+            "value": 12
+          },
+          "top": {
+            "type": "px",
+            "value": 12
+          }
+        }
+      },
+      "runtime_id": "btn.primary",
+      "source_id": "button",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 0.85,
+            "g": 0.35,
+            "r": 0.15,
+            "space": "srgb"
+          },
+          "type": "solid"
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "label": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "runtime_id": "btn.primary/label",
+      "source_id": "label",
+      "style": {},
+      "text": {
+        "align_horizontal": "center",
+        "align_vertical": "center",
+        "content": "OK",
+        "defaults": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1,
+            "space": "srgb"
+          },
+          "family": "Inter",
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "normal"
+          },
+          "size": {
+            "type": "px",
+            "value": 16
+          },
+          "weight": 600
+        },
+        "overflow": "clip",
+        "runs": [],
+        "wrap": "nowrap"
+      },
+      "type": "text",
+      "visible": true
+    },
+    "root": {
+      "children": [
+        "button"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "flex_direction": "row",
+        "gap": {
+          "column": {
+            "type": "px",
+            "value": 8
+          },
+          "row": {
+            "type": "px",
+            "value": 8
+          }
+        }
+      },
+      "source_id": "root",
+      "style": {},
+      "type": "container",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

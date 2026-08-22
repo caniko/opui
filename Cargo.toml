@@ -1,0 +1,17 @@
+[package]
+name = "opui"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "openpencil-runtime-ui v1 checker and canonicalizer"
+license = "MIT"
+publish = false
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+jsonschema = { version = "0.48", default-features = false }
+roxmltree = "0.21"
+ryu-js = "1"
+serde = "1"
+serde_json = "1"
+sha2 = "0.10"

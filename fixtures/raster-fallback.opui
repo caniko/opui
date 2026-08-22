@@ -1,0 +1,55 @@
+{
+  "assets": {
+    "raster_fallback-ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a": {
+      "byte_length": 67,
+      "kind": "raster_fallback",
+      "mime_type": "image/png",
+      "sha256": "ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a",
+      "uri": "fallback/ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a.png"
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "opui.rasterization",
+      "details": {},
+      "message": "rasterized unsupported vector effect",
+      "node_id": "root",
+      "runtime_id": null,
+      "severity": "warning",
+      "strategy": "raster_fallback"
+    }
+  ],
+  "document": {
+    "name": "raster-fallback",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "root": {
+      "children": [],
+      "extensions": {},
+      "fallback": {
+        "asset": "raster_fallback-ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a",
+        "intrinsic_height": 1,
+        "intrinsic_width": 1
+      },
+      "layout": {},
+      "source_id": "root",
+      "style": {},
+      "type": "fallback",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

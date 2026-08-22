@@ -1,0 +1,54 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "invalid-numeric-values",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "root": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "padding": {
+          "bottom": {
+            "type": "px",
+            "value": 0
+          },
+          "left": {
+            "type": "px",
+            "value": 0
+          },
+          "right": {
+            "type": "px",
+            "value": 0
+          },
+          "top": {
+            "type": "px",
+            "value": -4
+          }
+        }
+      },
+      "source_id": "root",
+      "style": {
+        "opacity": 1.1
+      },
+      "type": "container",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

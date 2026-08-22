@@ -1,0 +1,319 @@
+{
+  "assets": {
+    "image-ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a": {
+      "byte_length": 67,
+      "kind": "image",
+      "mime_type": "image/png",
+      "sha256": "ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a",
+      "uri": "images/ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a.png"
+    }
+  },
+  "diagnostics": [],
+  "document": {
+    "name": "grid-layout",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "hero": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "grid_column": {
+          "end": {
+            "kind": "span",
+            "value": 2
+          },
+          "start": {
+            "kind": "line",
+            "value": 1
+          }
+        },
+        "grid_row": {
+          "end": {
+            "kind": "line",
+            "value": 2
+          },
+          "start": {
+            "kind": "line",
+            "value": 1
+          }
+        },
+        "width": {
+          "type": "fill",
+          "weight": 1
+        }
+      },
+      "source_id": "hero",
+      "style": {
+        "border": {
+          "color": {
+            "a": 1,
+            "b": 0.25,
+            "g": 0.2,
+            "r": 0.2,
+            "space": "srgb"
+          },
+          "style": "solid",
+          "width": {
+            "type": "px",
+            "value": 2
+          }
+        },
+        "corner_radius": {
+          "bottom_left": {
+            "type": "px",
+            "value": 8
+          },
+          "bottom_right": {
+            "type": "px",
+            "value": 8
+          },
+          "top_left": {
+            "type": "px",
+            "value": 8
+          },
+          "top_right": {
+            "type": "px",
+            "value": 8
+          }
+        },
+        "fill": {
+          "end": {
+            "x": 1,
+            "y": 1
+          },
+          "start": {
+            "x": 0,
+            "y": 0
+          },
+          "stops": [
+            {
+              "color": {
+                "a": 1,
+                "b": 0.8,
+                "g": 0.4,
+                "r": 0.2,
+                "space": "srgb"
+              },
+              "offset": 0
+            },
+            {
+              "color": {
+                "a": 1,
+                "b": 0.5,
+                "g": 0.3,
+                "r": 0.8,
+                "space": "srgb"
+              },
+              "offset": 1
+            }
+          ],
+          "type": "linear"
+        },
+        "outer_shadows": [
+          {
+            "blur": {
+              "type": "px",
+              "value": 12
+            },
+            "color": {
+              "a": 0.35,
+              "b": 0,
+              "g": 0,
+              "r": 0,
+              "space": "srgb"
+            },
+            "offset_x": {
+              "type": "px",
+              "value": 0
+            },
+            "offset_y": {
+              "type": "px",
+              "value": 4
+            },
+            "spread": {
+              "type": "px",
+              "value": -2
+            }
+          }
+        ],
+        "rotation": {
+          "degrees": 2
+        },
+        "translation": {
+          "x": {
+            "type": "px",
+            "value": 4
+          },
+          "y": {
+            "type": "px",
+            "value": -2
+          }
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "icon": {
+      "children": [],
+      "extensions": {},
+      "image": {
+        "asset": "image-ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a",
+        "fit": "contain",
+        "intrinsic_height": 32,
+        "intrinsic_width": 32,
+        "nine_slice": {
+          "bottom": 2,
+          "left": 3,
+          "right": 3,
+          "top": 2
+        },
+        "tint": {
+          "a": 0.8,
+          "b": 0.2,
+          "g": 0.4,
+          "r": 0.9,
+          "space": "srgb"
+        }
+      },
+      "layout": {
+        "grid_column": {
+          "end": {
+            "kind": "span",
+            "value": 1
+          },
+          "start": {
+            "kind": "line",
+            "value": 2
+          }
+        },
+        "grid_row": {
+          "end": {
+            "kind": "auto"
+          },
+          "start": {
+            "kind": "line",
+            "value": 2
+          }
+        }
+      },
+      "runtime_id": "grid.icon",
+      "source_id": "icon",
+      "style": {},
+      "type": "image",
+      "visible": true
+    },
+    "photo": {
+      "children": [],
+      "extensions": {},
+      "image": {
+        "asset": "image-ebf4f635a17d10d6eb46ba680b70142419aa3220f228001a036d311a22ee9d2a",
+        "fit": "cover",
+        "intrinsic_height": 32,
+        "intrinsic_width": 32,
+        "nine_slice": null,
+        "tint": null
+      },
+      "layout": {
+        "grid_column": {
+          "end": {
+            "kind": "span",
+            "value": 1
+          },
+          "start": {
+            "kind": "line",
+            "value": 1
+          }
+        },
+        "grid_row": {
+          "end": {
+            "kind": "auto"
+          },
+          "start": {
+            "kind": "line",
+            "value": 2
+          }
+        }
+      },
+      "runtime_id": "grid.photo",
+      "source_id": "photo",
+      "style": {},
+      "type": "image",
+      "visible": true
+    },
+    "root": {
+      "children": [
+        "hero",
+        "photo",
+        "icon"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "display": "grid",
+        "gap": {
+          "column": {
+            "type": "px",
+            "value": 16
+          },
+          "row": {
+            "type": "px",
+            "value": 16
+          }
+        },
+        "grid_template_columns": [
+          {
+            "type": "fr",
+            "value": 1
+          },
+          {
+            "max": {
+              "type": "fr",
+              "value": 2
+            },
+            "min": {
+              "type": "px",
+              "value": 120
+            },
+            "type": "minmax"
+          }
+        ],
+        "grid_template_rows": [
+          {
+            "type": "px",
+            "value": 80
+          },
+          {
+            "type": "auto"
+          }
+        ],
+        "height": {
+          "type": "percent",
+          "value": 100
+        },
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "root",
+      "style": {},
+      "type": "container",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

@@ -1,0 +1,99 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "text-runs",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {},
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "root": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "source_id": "root",
+      "style": {},
+      "text": {
+        "align_horizontal": "start",
+        "align_vertical": "start",
+        "content": "A👋éB",
+        "defaults": {
+          "color": {
+            "a": 1,
+            "b": 0.1,
+            "g": 0.1,
+            "r": 0.1,
+            "space": "srgb"
+          },
+          "family": "Inter",
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "normal"
+          },
+          "size": {
+            "type": "px",
+            "value": 18
+          },
+          "weight": 400
+        },
+        "overflow": "clip",
+        "runs": [
+          {
+            "end": 1,
+            "start": 0,
+            "style": {
+              "weight": 700
+            }
+          },
+          {
+            "end": 5,
+            "start": 1,
+            "style": {
+              "color": {
+                "a": 1,
+                "b": 0.1,
+                "g": 0.2,
+                "r": 0.8,
+                "space": "srgb"
+              },
+              "size": {
+                "type": "px",
+                "value": 22
+              }
+            }
+          },
+          {
+            "end": 8,
+            "start": 5,
+            "style": {
+              "font_style": "italic",
+              "letter_spacing": {
+                "type": "px",
+                "value": 0.5
+              }
+            }
+          }
+        ],
+        "wrap": "wrap"
+      },
+      "type": "text",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}

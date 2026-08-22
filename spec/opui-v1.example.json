@@ -1,0 +1,417 @@
+{
+  "assets": {},
+  "diagnostics": [],
+  "document": {
+    "name": "opui-v1.example",
+    "reference_viewport": {
+      "height": 900,
+      "width": 1440
+    }
+  },
+  "entrypoints": {
+    "default": "root"
+  },
+  "extensions": {
+    "org.openpencil.example": {
+      "complete": true
+    }
+  },
+  "format": "openpencil-runtime-ui",
+  "generator": {
+    "name": "openpencil",
+    "version": "1.0.0"
+  },
+  "nodes": {
+    "caption": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "source_id": "caption",
+      "style": {},
+      "text": {
+        "align_horizontal": "end",
+        "align_vertical": "end",
+        "content": "example",
+        "defaults": {
+          "color": {
+            "a": 1,
+            "b": 0.1,
+            "g": 0.1,
+            "r": 0.1,
+            "space": "srgb"
+          },
+          "family": "Inter",
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "multiple",
+            "value": 1.4
+          },
+          "size": {
+            "type": "px",
+            "value": 12
+          },
+          "weight": 400
+        },
+        "overflow": "clip",
+        "runs": [],
+        "wrap": "wrap"
+      },
+      "type": "text",
+      "visible": true
+    },
+    "fixed": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "display": "absolute",
+        "height": {
+          "type": "px",
+          "value": 40
+        },
+        "position": "absolute",
+        "width": {
+          "type": "percent",
+          "value": 20
+        }
+      },
+      "source_id": "fixed",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 0.8,
+            "g": 0.5,
+            "r": 0.3,
+            "space": "srgb"
+          },
+          "type": "solid"
+        },
+        "rotation": {
+          "degrees": -3
+        },
+        "scale": {
+          "x": 1.05,
+          "y": 1.05
+        },
+        "translation": {
+          "x": {
+            "type": "px",
+            "value": 2
+          },
+          "y": {
+            "type": "px",
+            "value": 0
+          }
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "grow": {
+      "children": [],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "height": {
+          "type": "px",
+          "value": 40
+        },
+        "width": {
+          "type": "fill",
+          "weight": 1
+        }
+      },
+      "source_id": "grow",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 0.95,
+            "g": 0.92,
+            "r": 0.9,
+            "space": "srgb"
+          },
+          "type": "solid"
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "hero": {
+      "children": [
+        "title"
+      ],
+      "component": {
+        "component_name": "Hero",
+        "definition_source_id": "Hero/Default",
+        "role": "instance",
+        "variant_properties": {
+          "tone": "light"
+        }
+      },
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "display": "grid",
+        "grid_template_columns": [
+          {
+            "type": "fr",
+            "value": 1
+          },
+          {
+            "max": {
+              "type": "auto"
+            },
+            "min": {
+              "type": "px",
+              "value": 40
+            },
+            "type": "minmax"
+          }
+        ],
+        "height": {
+          "type": "px",
+          "value": 120
+        },
+        "width": {
+          "type": "fill",
+          "weight": 1
+        }
+      },
+      "runtime_id": "hero",
+      "source_id": "hero",
+      "style": {
+        "border": {
+          "color": {
+            "a": 0.2,
+            "b": 0,
+            "g": 0,
+            "r": 0,
+            "space": "srgb"
+          },
+          "style": "solid",
+          "width": {
+            "type": "px",
+            "value": 1
+          }
+        },
+        "fill": {
+          "center": {
+            "x": 0.5,
+            "y": 0.5
+          },
+          "radius": {
+            "x": 0.8,
+            "y": 0.6
+          },
+          "stops": [
+            {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 0.97,
+                "r": 0.95,
+                "space": "srgb"
+              },
+              "offset": 0
+            },
+            {
+              "color": {
+                "a": 1,
+                "b": 0.95,
+                "g": 0.82,
+                "r": 0.75,
+                "space": "srgb"
+              },
+              "offset": 1
+            }
+          ],
+          "type": "radial"
+        },
+        "outer_shadows": [
+          {
+            "blur": {
+              "type": "px",
+              "value": 8
+            },
+            "color": {
+              "a": 0.15,
+              "b": 0,
+              "g": 0,
+              "r": 0,
+              "space": "srgb"
+            },
+            "offset_x": {
+              "type": "px",
+              "value": 0
+            },
+            "offset_y": {
+              "type": "px",
+              "value": 2
+            },
+            "spread": {
+              "type": "px",
+              "value": 0
+            }
+          }
+        ]
+      },
+      "type": "container",
+      "visible": true
+    },
+    "root": {
+      "children": [
+        "hero",
+        "row",
+        "caption"
+      ],
+      "container": {},
+      "extensions": {
+        "org.openpencil.meta": {
+          "kind": "example"
+        }
+      },
+      "layout": {
+        "gap": {
+          "column": {
+            "type": "px",
+            "value": 0
+          },
+          "row": {
+            "type": "px",
+            "value": 16
+          }
+        },
+        "padding": {
+          "bottom": {
+            "type": "px",
+            "value": 24
+          },
+          "left": {
+            "type": "px",
+            "value": 24
+          },
+          "right": {
+            "type": "px",
+            "value": 24
+          },
+          "top": {
+            "type": "px",
+            "value": 24
+          }
+        },
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "root",
+      "style": {
+        "fill": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1,
+            "space": "srgb"
+          },
+          "type": "solid"
+        }
+      },
+      "type": "container",
+      "visible": true
+    },
+    "row": {
+      "children": [
+        "grow",
+        "fixed"
+      ],
+      "container": {},
+      "extensions": {},
+      "layout": {
+        "align_items": "center",
+        "flex_direction": "row",
+        "gap": {
+          "column": {
+            "type": "percent",
+            "value": 4
+          },
+          "row": {
+            "type": "px",
+            "value": 0
+          }
+        },
+        "width": {
+          "type": "percent",
+          "value": 100
+        }
+      },
+      "source_id": "row",
+      "style": {},
+      "type": "container",
+      "visible": true
+    },
+    "title": {
+      "children": [],
+      "extensions": {},
+      "layout": {},
+      "runtime_id": "hero/title",
+      "source_id": "title",
+      "style": {},
+      "text": {
+        "align_horizontal": "start",
+        "align_vertical": "center",
+        "content": "A👋éB",
+        "defaults": {
+          "color": {
+            "a": 1,
+            "b": 0.1,
+            "g": 0.1,
+            "r": 0.1,
+            "space": "srgb"
+          },
+          "family": "Inter",
+          "font_style": "normal",
+          "letter_spacing": {
+            "type": "px",
+            "value": 0
+          },
+          "line_height": {
+            "type": "normal"
+          },
+          "size": {
+            "type": "px",
+            "value": 24
+          },
+          "weight": 500
+        },
+        "overflow": "ellipsis",
+        "runs": [
+          {
+            "end": 1,
+            "start": 0,
+            "style": {
+              "weight": 800
+            }
+          },
+          {
+            "end": 5,
+            "start": 1,
+            "style": {
+              "font_style": "italic"
+            }
+          }
+        ],
+        "wrap": "nowrap"
+      },
+      "type": "text",
+      "visible": true
+    }
+  },
+  "schema_version": 1
+}
